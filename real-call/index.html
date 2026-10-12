@@ -1,0 +1,2800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Real Call helps you improve spoken English through real-person voice calls, AI conversation practice, interactive learning games, and free educational lessons.">
+<title>Real Call — Spoken English Practice with Real Calls, AI & Games</title>
+<meta name="theme-color" content="#4f46e5">
+<meta name="robots" content="index,follow">
+<meta name="author" content="Real Call">
+<meta property="og:title" content="Real Call — Spoken English Practice">
+<meta property="og:description" content="Practise spoken English with real learners, AI voice partners, learning games and free lessons.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Real Call — Spoken English Practice">
+<meta name="twitter:description" content="Real-person voice calls, AI practice, games and free English lessons.">
+<link rel="canonical" href="/">
+<!-- Add your Google Search Console verification meta tag here after you verify the site -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<style>
+  body { font-family:'Plus Jakarta Sans', system-ui, sans-serif; background:#f8fafc; color:#0f172a; -webkit-tap-highlight-color:transparent; }
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:9999px; }
+  .no-scrollbar::-webkit-scrollbar { display:none; }
+  .no-scrollbar { scrollbar-width:none; }
+
+  :root { --chrome-top:53px; --chrome-bottom:60px; }
+  @media (min-width:768px){ :root{ --chrome-top:0px; --chrome-bottom:0px; } }
+  body.call-mode { overflow:hidden; }
+  .call-page { position:fixed; left:0; right:0; top:var(--chrome-top); bottom:var(--chrome-bottom); z-index:20; display:flex; padding:12px; padding-bottom:calc(12px + env(safe-area-inset-bottom,0px)); }
+  .call-page.hidden { display:none !important; }
+  @media (min-width:768px){ .call-page{ left:17rem; padding:20px 24px; } }
+  .call-card { position:relative; flex:1; min-height:0; width:100%; max-width:28rem; margin:0 auto; display:flex; flex-direction:column; border-radius:28px; overflow:hidden; color:#fff; background:radial-gradient(circle at 50% 30%, rgba(99,102,241,.35), transparent 60%), linear-gradient(180deg,#1e1b4b 0%,#0f172a 100%); box-shadow:0 25px 50px -12px rgba(15,23,42,.45); }
+  .view { display:none; } .view.on { display:flex; }
+
+  .wave { display:flex; align-items:center; justify-content:center; gap:4px; height:36px; }
+  .wave .bar { width:4px; height:8px; border-radius:9999px; background:linear-gradient(180deg,#a5b4fc,#818cf8); }
+  .wave.live .bar { animation:wv 1s ease-in-out infinite; }
+  .wave.live .bar:nth-child(2){ animation-delay:.12s } .wave.live .bar:nth-child(3){ animation-delay:.24s }
+  .wave.live .bar:nth-child(4){ animation-delay:.36s } .wave.live .bar:nth-child(5){ animation-delay:.48s }
+  .wave.live .bar:nth-child(6){ animation-delay:.6s }  .wave.live .bar:nth-child(7){ animation-delay:.72s }
+  .wave.mine .bar { background:linear-gradient(180deg,#6ee7b7,#10b981); }
+  .wave.paused .bar { animation-play-state:paused; opacity:.4; }
+  @keyframes wv { 0%,100%{height:6px} 50%{height:32px} }
+
+  .ring { position:relative; }
+  .ring.live::before, .ring.live::after { content:""; position:absolute; inset:-9px; border-radius:9999px; border:2px solid rgba(52,211,153,.5); animation:rp 2s ease-out infinite; }
+  .ring.live::after { animation-delay:1s; }
+  .ring.speak::before { content:""; position:absolute; inset:-10px; border-radius:9999px; border:2px solid rgba(165,180,252,.8); animation:rp 1.2s ease-out infinite; }
+  .ring.search::before { content:""; position:absolute; inset:-12px; border-radius:9999px; border:2px dashed rgba(165,180,252,.7); animation:spin 4s linear infinite; }
+  @keyframes rp { 0%{transform:scale(.95);opacity:.9} 100%{transform:scale(1.28);opacity:0} }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .blink { animation:bl 1.2s ease-in-out infinite; } @keyframes bl { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  .ctrl { width:54px; height:54px; border-radius:9999px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.1); color:#e2e8f0; transition:all .2s; }
+  .ctrl:hover:not(:disabled){ background:rgba(255,255,255,.18); }
+  .ctrl:disabled { opacity:.35; cursor:not-allowed; }
+  .ctrl.on { background:rgba(16,185,129,.25); color:#6ee7b7; }
+  .ctrl.off { background:rgba(244,63,94,.22); color:#fda4af; }
+  .big-btn { height:62px; min-width:184px; padding:0 26px; border-radius:9999px; display:flex; align-items:center; justify-content:center; gap:8px; font-weight:800; font-size:14px; color:#fff; background:linear-gradient(135deg,#6366f1,#7c3aed); box-shadow:0 10px 25px -5px rgba(99,102,241,.5); transition:transform .15s; }
+  .big-btn:active { transform:scale(.97); }
+  .big-btn.danger { background:linear-gradient(135deg,#e11d48,#be123c); box-shadow:0 10px 25px -5px rgba(225,29,72,.5); }
+  .bubble-me { background:#4f46e5; color:#fff; border-radius:18px 18px 4px 18px; }
+  .bubble-them { background:rgba(255,255,255,.12); color:#f1f5f9; border-radius:18px 18px 18px 4px; }
+
+  .opt { width:100%; text-align:left; padding:14px 16px; border-radius:14px; border:2px solid #e2e8f0; background:#fff; color:#334155; font-size:14px; font-weight:600; transition:all .15s; }
+  .opt:hover:not(:disabled){ border-color:#a5b4fc; background:#f8faff; }
+  .opt:disabled { cursor:default; }
+  .opt.correct { border-color:#10b981; background:#ecfdf5; color:#047857; }
+  .opt.wrong { border-color:#f43f5e; background:#fff1f2; color:#be123c; }
+  .chip { padding:10px 14px; border-radius:12px; font-weight:700; font-size:14px; background:#fff; border:2px solid #cbd5e1; color:#1e293b; transition:all .15s; }
+  .chip:hover:not(:disabled){ border-color:#818cf8; transform:translateY(-1px); }
+  .chip:disabled { opacity:.6; }
+  .pop { animation:pop .3s ease-out; } @keyframes pop { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+  .stars button { font-size:34px; line-height:1; color:#475569; transition:transform .1s, color .1s; }
+  .stars button.on { color:#fbbf24; }
+  .stars button:active { transform:scale(.9); }
+
+  .caption-in { animation:pop .35s ease-out; }
+  .toast { position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); opacity:0; background:#0f172a; color:#fff; padding:10px 16px; border-radius:12px; font-size:12px; font-weight:700; z-index:100; transition:all .25s; pointer-events:none; max-width:90vw; text-align:center; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  @media (min-width:768px){ .toast{ bottom:24px; } }
+
+  /* ----- Dark theme (applied by html.dark) ----- */
+  html.dark body { background:#0b1120; color:#e2e8f0; }
+  html.dark .bg-white { background-color:#131c31 !important; }
+  html.dark .bg-white\/95, html.dark .bg-white\/90 { background-color:rgba(15,23,42,.94) !important; }
+  html.dark .bg-slate-50, html.dark .bg-slate-50\/60 { background-color:#18233b !important; }
+  html.dark .bg-slate-100 { background-color:#1e2a44 !important; }
+  html.dark .bg-indigo-50 { background-color:#1e1b4b !important; }
+  html.dark .bg-emerald-50 { background-color:rgba(16,185,129,.12) !important; }
+  html.dark .bg-violet-50 { background-color:rgba(139,92,246,.14) !important; }
+  html.dark .bg-rose-50 { background-color:rgba(244,63,94,.12) !important; }
+  html.dark .text-slate-900, html.dark .text-slate-800, html.dark .text-slate-700 { color:#e2e8f0 !important; }
+  html.dark .text-slate-600 { color:#cbd5e1 !important; }
+  html.dark .text-slate-500, html.dark .text-slate-400 { color:#94a3b8 !important; }
+  html.dark .border-slate-200, html.dark .border-slate-200\/80, html.dark .border-slate-100 { border-color:#263450 !important; }
+  html.dark input, html.dark select { color:#e2e8f0; }
+  html.dark input::placeholder { color:#64748b; }
+  html.dark .opt { background:#131c31; color:#e2e8f0; border-color:#263450; }
+  html.dark .opt:hover:not(:disabled) { background:#18233b; }
+  html.dark .chip { background:#131c31; color:#e2e8f0; border-color:#334155; }
+  html.dark .toast { background:#e2e8f0; color:#0f172a; }
+  html.dark details summary { color:#e2e8f0; }
+
+  /* ----- Responsive safety for every screen size ----- */
+  html, body { overflow-x:hidden; }
+  button { touch-action:manipulation; }
+  main, .page, .call-card { min-width:0; }
+  .break { overflow-wrap:anywhere; }
+  input, select, textarea { font-size:16px; max-width:100%; }   /* stops iOS zoom on focus */
+  .page { width:100%; }
+  @media (min-width:1280px){ .page { max-width:1120px; } }
+  @media (max-width:370px){
+    .big-btn { min-width:0; padding:0 16px; font-size:13px; }
+    .ctrl { width:48px; height:48px; }
+    .call-card { border-radius:22px; }
+    .wave { gap:3px; }
+  }
+  @media (max-height:700px) and (max-width:767px){
+    .call-stage-tip { display:none; }
+    .wave { height:28px; }
+  }
+
+  /* ----- App shell vs. sign-in screen ----- */
+  #auth-screen { display:none; }
+  body:not(.authed) #auth-screen { display:block; }
+  body:not(.authed) .app-chrome { display:none !important; }
+  body:not(.authed) { overflow:hidden; }
+
+  /* ----- Auth screen (fits viewport, no scroll) ----- */
+  .auth-tab { transition:all .2s; }
+  .auth-tab.on { background:#fff; color:#4338ca; box-shadow:0 1px 3px rgba(15,23,42,.12); }
+  .auth-tab:not(.on) { color:#64748b; }
+  .field { width:100%; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px 12px; font-size:14px; font-weight:600; color:#0f172a; outline:none; }
+  .field:focus { border-color:#818cf8; box-shadow:0 0 0 3px rgba(129,140,248,.2); }
+  .field-label { display:block; font-size:11px; font-weight:700; color:#64748b; margin-bottom:4px; }
+  .g-badge { width:20px; height:20px; border-radius:9999px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#4285f4; background:#fff; }
+  #auth-screen { overflow:hidden !important; height:100dvh; height:100vh; }
+  #auth-screen .auth-wrap { height:100%; max-height:100dvh; max-height:100vh; display:flex; align-items:center; justify-content:center; padding:12px; }
+  #auth-screen .auth-card { max-height:calc(100dvh - 24px); max-height:calc(100vh - 24px); overflow:hidden; }
+  #auth-screen .bg-white { background:#fff !important; }
+  html.dark #auth-screen .bg-white { background:#fff !important; color:#0f172a; }
+  html.dark #auth-screen .text-slate-900, html.dark #auth-screen .text-slate-500, html.dark #auth-screen .text-slate-400 { color:inherit !important; }
+  html.dark #auth-screen .text-slate-900 { color:#0f172a !important; }
+  html.dark #auth-screen .text-slate-500 { color:#64748b !important; }
+  html.dark #auth-screen .text-slate-400 { color:#94a3b8 !important; }
+  @media (max-height:720px) {
+    #auth-screen .auth-hero { display:none !important; }
+    #auth-screen .auth-card { padding:1rem 1.25rem !important; }
+    #auth-screen .auth-extra { display:none !important; }
+  }
+  @media (max-height:560px) {
+    #auth-screen .auth-card { padding:0.75rem 1rem !important; border-radius:1rem !important; }
+    #auth-screen .auth-tabs { margin-bottom:0.75rem !important; }
+    #auth-screen form.space-y-3 > * + * { margin-top:0.5rem !important; }
+  }
+</style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row selection:bg-indigo-500 selection:text-white">
+<!-- Offline / slow network banner -->
+<div id="net-banner" class="hidden fixed top-0 inset-x-0 z-[100] bg-amber-500 text-white text-center text-sm font-semibold py-2.5 px-4 shadow-lg flex items-center justify-center gap-3">
+  <span id="net-banner-text">You are offline. Google Login and live voice calls need internet.</span>
+  <button type="button" onclick="retryConnection()" class="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg text-xs font-bold">Retry Connection</button>
+</div>
+
+<!-- ============ DESKTOP SIDEBAR ============ -->
+<aside class="app-chrome hidden md:flex flex-col w-68 bg-white border-r border-slate-200/80 p-5 fixed inset-y-0 z-40">
+  <div class="flex items-center gap-3 mb-8 px-2">
+    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-200"><i data-lucide="phone-call" class="w-5 h-5"></i></div>
+    <div>
+      <h1 class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Real Call</h1>
+      <p class="text-[11px] text-slate-400 font-medium">Spoken English & AI</p>
+    </div>
+  </div>
+  <nav class="space-y-1.5 flex-1">
+    <button onclick="go('home')" data-nav="home" class="nav-d w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all"><i data-lucide="house" class="w-5 h-5"></i> Home</button>
+    <button onclick="go('call')" data-nav="call" class="nav-d w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all"><i data-lucide="users" class="w-5 h-5"></i> English Call <span class="ml-auto text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">1v1</span></button>
+    <button onclick="go('games')" data-nav="games" class="nav-d w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all"><i data-lucide="gamepad-2" class="w-5 h-5"></i> Games <span class="ml-auto text-[10px] bg-violet-100 text-violet-700 font-bold px-2 py-0.5 rounded-full">12</span></button>
+    <button onclick="go('ai')" data-nav="ai" class="nav-d w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all"><i data-lucide="bot" class="w-5 h-5"></i> AI Voice Call</button>
+    <button onclick="go('resources')" data-nav="resources" class="nav-d w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all"><i data-lucide="book-open" class="w-5 h-5"></i> Learn English</button>
+    <button onclick="go('settings')" data-nav="settings" class="nav-d w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all"><i data-lucide="settings" class="w-5 h-5"></i> Settings</button>
+  </nav>
+  <div class="mt-auto pt-4 border-t border-slate-100 space-y-2">
+    <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+      <div class="w-9 h-9 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs"><span class="me-init">TC</span></div>
+      <div class="flex-1 min-w-0">
+        <h4 class="text-xs font-bold text-slate-800 truncate"><span class="me-name">Tarique Choudhary</span></h4>
+        <p class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> <span id="me-plan">Member</span></p>
+      </div>
+    </div>
+    <div class="px-2 flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-slate-400">
+      <button type="button" onclick="go('about')" class="hover:text-indigo-600">About</button>
+      <button type="button" onclick="go('contact')" class="hover:text-indigo-600">Contact</button>
+      <button type="button" onclick="go('privacy')" class="hover:text-indigo-600">Privacy</button>
+      <button type="button" onclick="go('help')" class="hover:text-indigo-600">Help</button>
+      <a href="https://www.instagram.com/improve_englishhhhh?obrf=a3JjaGVpZDBkMjZh" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-600">Instagram</a>
+    </div>
+  </div>
+</aside>
+
+<!-- ============ MOBILE BOTTOM NAV ============ -->
+<nav class="app-chrome md:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-2.5 z-50 flex items-center justify-around shadow-lg">
+  <button onclick="go('home')" data-mnav="home" class="nav-m flex flex-col items-center gap-1 transition-colors"><i data-lucide="house" class="w-5 h-5"></i><span class="text-[10px] font-bold">Home</span></button>
+  <button onclick="go('call')" data-mnav="call" class="nav-m flex flex-col items-center gap-1 transition-colors"><i data-lucide="users" class="w-5 h-5"></i><span class="text-[10px] font-bold">1v1 Call</span></button>
+  <button onclick="go('games')" data-mnav="games" class="nav-m flex flex-col items-center gap-1 transition-colors"><i data-lucide="gamepad-2" class="w-5 h-5"></i><span class="text-[10px] font-bold">Games</span></button>
+  <button onclick="go('resources')" data-mnav="resources" class="nav-m flex flex-col items-center gap-1 transition-colors"><i data-lucide="book-open" class="w-5 h-5"></i><span class="text-[10px] font-bold">Learn</span></button>
+  <button onclick="go('ai')" data-mnav="ai" class="nav-m flex flex-col items-center gap-1 transition-colors"><i data-lucide="bot" class="w-5 h-5"></i><span class="text-[10px] font-bold">AI Voice</span></button>
+</nav>
+
+<main class="app-chrome flex-1 md:pl-68 pb-24 md:pb-12 min-h-screen flex flex-col">
+
+<header class="app-chrome md:hidden sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-100 px-4 py-3 z-30 flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white"><i data-lucide="phone-call" class="w-3.5 h-3.5"></i></div>
+    <span class="font-extrabold text-base bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Real Call</span>
+  </div>
+  <div class="flex items-center gap-2.5">
+    <button onclick="go('settings')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center" aria-label="Settings"><i data-lucide="settings" class="w-4 h-4"></i></button>
+    <div class="bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-full text-[11px] font-bold text-amber-700">🔥 12d</div>
+    <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-[11px]"><span class="me-init">TC</span></div>
+  </div>
+</header>
+
+<!-- ================= HOME ================= -->
+<section id="page-home" class="page max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 space-y-6">
+  <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-700 text-white p-6 sm:p-8 shadow-lg shadow-indigo-500/10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="space-y-1.5">
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/15 text-[11px] font-semibold text-indigo-100"><i data-lucide="sparkles" class="w-3 h-3"></i> Daily Goal Active</span>
+        <h2 class="text-2xl font-extrabold tracking-tight">Welcome back, <span class="me-first">Tarique</span>! 👋</h2>
+        <p class="text-indigo-100 text-xs sm:text-sm max-w-lg">Talk out loud with real learners or with live AI voice characters. Then play games to lock in new words.</p>
+      </div>
+      <button onclick="go('call')" class="px-5 py-3 rounded-xl bg-white text-indigo-600 font-bold text-xs shadow-md hover:bg-indigo-50 flex items-center gap-2 self-start"><i data-lucide="users" class="w-4 h-4"></i> Find 1-on-1 Partner</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">🔥</div><div><p class="text-[10px] font-semibold text-slate-400">Streak</p><h3 class="text-base font-extrabold">12 Days</h3></div></div>
+    <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">📞</div><div><p class="text-[10px] font-semibold text-slate-400">Calls Done</p><h3 id="home-calls" class="text-base font-extrabold">0</h3></div></div>
+    <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center">⚡</div><div><p class="text-[10px] font-semibold text-slate-400">XP Points</p><h3 id="home-xp" class="text-base font-extrabold">3,450</h3></div></div>
+    <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">📈</div><div><p class="text-[10px] font-semibold text-slate-400">Level</p><h3 class="text-base font-extrabold">B2 Upper</h3></div></div>
+  </div>
+
+  <div class="space-y-3">
+    <h3 class="text-sm font-bold">What would you like to practice today?</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <button onclick="go('call')" class="text-left bg-white p-5 rounded-2xl border-2 border-indigo-200 shadow-sm hover:shadow-md transition-all">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center mb-3"><i data-lucide="users" class="w-5 h-5"></i></div>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Live 1v1</span>
+        <h4 class="font-bold text-sm mt-1.5 mb-1">Real Call</h4>
+        <p class="text-[11px] text-slate-500">Live voice with a real learner online. No AI in 1v1.</p>
+      </button>
+      <button onclick="go('games')" class="text-left bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all">
+        <div class="w-10 h-10 rounded-xl bg-violet-600 text-white flex items-center justify-center mb-3"><i data-lucide="gamepad-2" class="w-5 h-5"></i></div>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-violet-600 bg-violet-50 px-2 py-0.5 rounded">Play & Learn</span>
+        <h4 class="font-bold text-sm mt-1.5 mb-1">Learning Games</h4>
+        <p class="text-[11px] text-slate-500">1,000+ questions in 12 games for vocabulary, grammar, listening and idioms.</p>
+      </button>
+      <button onclick="go('ai')" class="text-left bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center mb-3"><i data-lucide="bot" class="w-5 h-5"></i></div>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Real-time Voice</span>
+        <h4 class="font-bold text-sm mt-1.5 mb-1">AI Voice Call</h4>
+        <p class="text-[11px] text-slate-500">Speak live with 1,000+ AI characters and hear them reply.</p>
+      </button>
+    </div>
+    <button onclick="go('resources')" class="w-full text-left bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex items-start gap-4">
+      <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+      <div>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Free lessons</span>
+        <h4 class="font-bold text-sm mt-1.5 mb-1">English Learning Resources</h4>
+        <p class="text-[11px] text-slate-500">Original lessons: spoken English, grammar, vocabulary, interviews, quizzes and a 4-week plan.</p>
+      </div>
+    </button>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold">Recent sessions</h3>
+      <button onclick="clearHistory()" class="text-[11px] font-bold text-slate-400 hover:text-rose-500">Clear</button>
+    </div>
+    <div id="home-history" class="space-y-2"></div>
+  </div>
+
+  <footer class="text-center text-[11px] text-slate-400 space-y-2 pb-8 pt-2">
+    <div class="flex flex-wrap justify-center gap-x-3 gap-y-1">
+      <button type="button" onclick="go('about')" class="hover:text-indigo-600">About</button>
+      <button type="button" onclick="go('contact')" class="hover:text-indigo-600">Contact</button>
+      <button type="button" onclick="go('privacy')" class="hover:text-indigo-600">Privacy</button>
+      <button type="button" onclick="go('terms')" class="hover:text-indigo-600">Terms</button>
+      <button type="button" onclick="go('cookies')" class="hover:text-indigo-600">Cookies</button>
+      <button type="button" onclick="go('community')" class="hover:text-indigo-600">Community</button>
+      <button type="button" onclick="go('safety')" class="hover:text-indigo-600">Safety</button>
+      <button type="button" onclick="go('help')" class="hover:text-indigo-600">Help</button>
+      <a href="https://www.instagram.com/improve_englishhhhh?obrf=a3JjaGVpZDBkMjZh" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-600">Instagram</a>
+    </div>
+    <p>Real Call · <a href="mailto:mrt707174@gmail.com" class="hover:text-indigo-600">mrt707174@gmail.com</a></p>
+  </footer>
+</section>
+
+<!-- ================= 1-ON-1 REAL CALL ================= -->
+<section id="page-call" class="page call-page hidden">
+  <div class="call-card">
+    <div id="v-lobby" class="view on flex-col h-full p-5 sm:p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1 rounded-full">Ready</span>
+          <h2 class="text-lg font-extrabold mt-2">1-on-1 Real Call</h2>
+          <p class="text-xs text-indigo-200/80">Talk live with a real learner — no AI</p>
+        </div>
+        <div class="w-11 h-11 rounded-full bg-indigo-600 font-extrabold flex items-center justify-center text-sm ring-4 ring-white/10"><span class="me-init">TC</span></div>
+      </div>
+      <div class="flex-1 flex flex-col justify-center gap-5">
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-2 text-center">Choose a topic</p>
+          <div id="topic-chips" class="flex flex-wrap gap-2 justify-center"></div>
+        </div>
+        <p class="text-center text-xs text-indigo-200/80 leading-relaxed px-4">Real-time voice with another person. Both of you must press Start. Mic works best on Chrome/Edge.</p>
+      </div>
+      <div class="flex justify-center"><button onclick="startSearch()" class="big-btn"><i data-lucide="phone" class="w-4 h-4"></i> Start 1v1 Call</button></div>
+    </div>
+
+    <div id="v-search" class="view flex-col h-full items-center justify-center gap-6 p-6">
+      <div class="ring search relative w-24 h-24 rounded-full bg-violet-600 flex items-center justify-center text-2xl font-extrabold shadow-xl">??</div>
+      <div class="text-center">
+        <p class="font-extrabold text-base">Finding a real learner<span class="blink">…</span></p>
+        <p class="text-xs text-indigo-200/80 mt-1" id="search-status">Waiting for another person online…</p>
+      </div>
+      <button onclick="cancelSearch()" class="big-btn danger" style="min-width:160px"><i data-lucide="x" class="w-4 h-4"></i> Cancel</button>
+    </div>
+
+    <div id="v-live" class="view flex-col h-full p-4 sm:p-5 gap-3 min-h-0">
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink"></span> Live</span>
+        <div id="live-timer" class="font-mono text-sm font-bold bg-white/10 px-3 py-1.5 rounded-full">00:00</div>
+      </div>
+      <div class="flex items-center justify-center gap-6">
+        <div class="flex flex-col items-center gap-1.5">
+          <div class="w-14 h-14 rounded-full bg-indigo-600 font-extrabold flex items-center justify-center text-sm ring-4 ring-white/10"><span class="me-init">TC</span></div>
+          <span class="text-[10px] text-slate-300">You</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <div class="wave live"><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+          <span id="live-mic-state" class="text-[10px] text-slate-400">Mic off</span>
+        </div>
+        <div class="flex flex-col items-center gap-1.5">
+          <div id="live-partner-av" class="ring live w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 font-extrabold flex items-center justify-center text-sm ring-4 ring-white/10">AK</div>
+          <span id="live-partner-name" class="text-[10px] text-slate-300">Alex</span>
+        </div>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-3 flex items-start gap-3">
+        <div class="flex-1 min-w-0">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-amber-300">Talk about</p>
+          <p id="live-prompt" class="text-sm font-semibold mt-0.5">What did you do this morning?</p>
+        </div>
+        <button onclick="nextPrompt()" class="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 shrink-0">Next</button>
+      </div>
+      <div id="peer-log" class="flex-1 min-h-0 overflow-y-auto no-scrollbar space-y-2 pr-1"></div>
+      <div id="peer-tip" class="hidden text-[11px] bg-amber-400/10 border border-amber-400/30 text-amber-100 rounded-xl px-3 py-2"></div>
+      <form class="flex items-center gap-2" onsubmit="event.preventDefault(); peerTyped();">
+        <input id="peer-input" autocomplete="off" placeholder="Type a reply…" class="flex-1 min-w-0 bg-white/10 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-indigo-400">
+        <button type="submit" class="w-11 h-11 rounded-xl bg-indigo-600 hover:bg-indigo-500 flex items-center justify-center shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
+      </form>
+      <div class="flex items-center justify-center gap-4 pt-1">
+        <button id="peer-mic" onclick="peerToggleMic()" class="ctrl" aria-label="Microphone"><i data-lucide="mic-off" class="w-5 h-5"></i></button>
+        <button onclick="endPeer()" class="big-btn danger" style="min-width:150px; height:54px"><i data-lucide="phone-off" class="w-4 h-4"></i> End Call</button>
+        <button id="peer-spk" onclick="peerToggleSpeaker()" class="ctrl on" aria-label="Speaker"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+      </div>
+    </div>
+
+    <div id="v-summary-peer" class="view flex-col h-full overflow-y-auto no-scrollbar p-5 sm:p-6"></div>
+    <audio id="remote-audio" autoplay playsinline class="hidden"></audio>
+  </div>
+</section>
+
+<!-- ================= SETTINGS ================= -->
+<section id="page-settings" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Settings</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Back to Home</button>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-4">
+    <h3 class="text-sm font-extrabold">Profile</h3>
+    <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-lg shrink-0"><span class="me-init">TC</span></div>
+      <div class="flex-1 min-w-0">
+        <label for="set-name" class="block text-[11px] font-bold text-slate-500 mb-1">Display name</label>
+        <input id="set-name" maxlength="24" placeholder="Your name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none focus:border-indigo-400">
+      </div>
+    </div>
+    <div>
+      <label for="set-level" class="block text-[11px] font-bold text-slate-500 mb-1">English level</label>
+      <select id="set-level" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none focus:border-indigo-400">
+        <option value="A2">A2 - Elementary</option>
+        <option value="B1">B1 - Intermediate</option>
+        <option value="B2">B2 - Upper intermediate</option>
+        <option value="C1">C1 - Advanced</option>
+      </select>
+    </div>
+    <button onclick="saveProfile()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">Save profile</button>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-3">
+    <div>
+      <h3 class="text-sm font-extrabold">Learning mode</h3>
+      <p class="text-[11px] text-slate-500">Choose when correction tips appear during calls.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-3">
+      <button data-seg="mode" data-val="relaxed" onclick="setMode('relaxed')" class="seg text-left p-4 rounded-xl border-2 transition-all">
+        <p class="font-extrabold text-sm">😊 Relaxed</p>
+        <p class="text-[11px] text-slate-500 mt-1">Tips appear live during the call so you can fix mistakes right away.</p>
+      </button>
+      <button data-seg="mode" data-val="focus" onclick="setMode('focus')" class="seg text-left p-4 rounded-xl border-2 transition-all">
+        <p class="font-extrabold text-sm">🎯 Focus</p>
+        <p class="text-[11px] text-slate-500 mt-1">No interruptions. Tips are collected and shown in your call summary.</p>
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-3">
+    <h3 class="text-sm font-extrabold">Appearance</h3>
+    <div class="grid grid-cols-3 gap-3">
+      <button data-seg="theme" data-val="light" onclick="setTheme('light')" class="seg px-3 py-3 rounded-xl border-2 text-xs font-bold transition-all">☀️ Light</button>
+      <button data-seg="theme" data-val="dark" onclick="setTheme('dark')" class="seg px-3 py-3 rounded-xl border-2 text-xs font-bold transition-all">🌙 Dark</button>
+      <button data-seg="theme" data-val="system" onclick="setTheme('system')" class="seg px-3 py-3 rounded-xl border-2 text-xs font-bold transition-all">💻 System</button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-4">
+    <h3 class="text-sm font-extrabold">Voice</h3>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div>
+        <label for="set-accent" class="block text-[11px] font-bold text-slate-500 mb-1">Accent</label>
+        <select id="set-accent" onchange="setAccent(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none">
+          <option value="en-US">American English</option>
+          <option value="en-GB">British English</option>
+        </select>
+      </div>
+      <div>
+        <label for="set-rate" class="block text-[11px] font-bold text-slate-500 mb-1">Speaking speed <span id="set-rate-val" class="text-slate-400">1.0x</span></label>
+        <input id="set-rate" type="range" min="0.7" max="1.2" step="0.05" oninput="setRate(this.value)" class="w-full accent-indigo-600">
+      </div>
+    </div>
+    <label class="flex items-center justify-between gap-3 bg-slate-50 rounded-xl p-3 cursor-pointer">
+      <span><span class="block text-sm font-bold">Auto-listen in AI calls</span><span class="block text-[11px] text-slate-500">Mic opens automatically after the character speaks. Off = tap the mic to talk.</span></span>
+      <input id="set-autolisten" type="checkbox" onchange="setAutoListen(this.checked)" class="w-5 h-5 accent-indigo-600 shrink-0">
+    </label>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-3">
+    <h3 class="text-sm font-extrabold">Account</h3>
+    <p id="acc-desc" class="text-xs text-slate-500 break"></p>
+    <div class="flex flex-wrap gap-2">
+      <button id="acc-upgrade" onclick="upgradeGuest()" class="hidden px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">Create account to save progress</button>
+      <button onclick="signOut()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold hover:bg-slate-50">Sign out</button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-3">
+    <h3 class="text-sm font-extrabold">Your data</h3>
+    <p class="text-[11px] text-slate-500">Your profile, progress and history are stored in this browser only.</p>
+    <div class="grid sm:grid-cols-2 gap-3">
+      <button onclick="exportData()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold hover:bg-slate-50">Download my data (JSON)</button>
+      <button onclick="clearHistory()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold hover:bg-slate-50">Clear call history</button>
+      <button onclick="resetProgress()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold hover:bg-slate-50">Reset XP and game progress</button>
+      <button onclick="deleteAllData()" class="px-4 py-2.5 rounded-xl border border-rose-200 text-rose-600 text-xs font-bold hover:bg-rose-50">Delete all my data</button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-2 text-xs">
+    <h3 class="text-sm font-extrabold mb-1">Legal &amp; policies</h3>
+    <p class="text-slate-500 mb-2">Full policy pages (recommended for AdSense review):</p>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" onclick="go('privacy')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">Privacy Policy</button>
+      <button type="button" onclick="go('terms')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">Terms</button>
+      <button type="button" onclick="go('cookies')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">Cookies</button>
+      <button type="button" onclick="go('community')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">Community</button>
+      <button type="button" onclick="go('safety')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">Safety</button>
+      <button type="button" onclick="go('disclaimer')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">Disclaimer</button>
+      <button type="button" onclick="go('about')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">About</button>
+      <button type="button" onclick="go('contact')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">Contact</button>
+      <button type="button" onclick="go('help')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-700 font-semibold">Help / FAQ</button>
+    </div>
+  </div>
+
+  <p class="text-center text-[10px] text-slate-400 pb-4">Real Call · Learning progress is stored in this browser</p>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="page-about" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">About Real Call</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed">
+    <p><strong>Real Call</strong> is an English-learning platform designed to help people improve spoken English through real practice.</p>
+    <p>We offer:</p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><strong>1-on-1 Real Call</strong> — live audio-only conversations with other learners (WebRTC). No video.</li>
+      <li><strong>AI Voice Call</strong> — conversation practice with AI characters and grammar feedback (when an AI service is available).</li>
+      <li><strong>12 learning games</strong> — vocabulary, grammar, spelling, idioms, and more.</li>
+      <li><strong>Free English lessons</strong> — original educational content you can read and practise any time.</li>
+    </ul>
+    <p>Our goal is to make spoken English practice accessible, useful, and safe. Partner learners and AI characters are for practice only; they are not professional teachers or the real celebrities some characters are named after.</p>
+    <p>Contact: <a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-semibold">mrt707174@gmail.com</a></p>
+    <p>Instagram: <a href="https://www.instagram.com/improve_englishhhhh?obrf=a3JjaGVpZDBkMjZh" target="_blank" rel="noopener noreferrer" class="text-indigo-600 font-semibold">@improve_englishhhhh</a></p>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="page-contact" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Contact Us</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed">
+    <p>We are happy to hear from you. Use the email below for support, privacy requests, technical problems, or to report abuse during real-person calls.</p>
+    <p class="text-base"><strong>Email:</strong> <a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-bold">mrt707174@gmail.com</a></p>
+    <p><strong>What to include when you write:</strong></p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>A short description of the issue or request</li>
+      <li>Whether it relates to a 1v1 call, AI practice, a game, or your account/data</li>
+      <li>Your browser and device type if reporting a technical problem</li>
+      <li>For abuse reports: approximate date/time and what happened (do not share other users’ private details unnecessarily)</li>
+    </ul>
+    <p>We aim to reply when we can. Response times are not guaranteed.</p>
+    <p>Instagram: <a href="https://www.instagram.com/improve_englishhhhh?obrf=a3JjaGVpZDBkMjZh" target="_blank" rel="noopener noreferrer" class="text-indigo-600 font-semibold">@improve_englishhhhh</a></p>
+    <div class="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
+      <p class="font-bold text-slate-800 mb-2">Quick message (opens your email app)</p>
+      <label class="block text-[11px] font-bold text-slate-500 mb-1">Subject</label>
+      <input id="contact-subject" type="text" maxlength="120" placeholder="Support / Privacy / Abuse report" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm mb-3 focus:outline-none focus:border-indigo-400">
+      <label class="block text-[11px] font-bold text-slate-500 mb-1">Message</label>
+      <textarea id="contact-body" rows="4" maxlength="2000" placeholder="Describe your question or issue…" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm mb-3 focus:outline-none focus:border-indigo-400"></textarea>
+      <button type="button" onclick="openContactMail()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">Open email to send</button>
+      <p class="text-[10px] text-slate-400 mt-2">This uses your device’s mail app. Nothing is submitted to our server unless you send the email.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRIVACY POLICY ================= -->
+<section id="page-privacy" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Privacy Policy</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed prose-policy">
+    <p class="text-xs text-slate-400">Last updated: October 2026</p>
+    <p>This Privacy Policy explains how <strong>Real Call</strong> handles information when you use the website and app.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">1. Information stored on your device</h3>
+    <p>Most of your learning data stays in your browser’s <strong>local storage</strong>, including:</p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Display name and English level preference</li>
+      <li>Settings (theme, learning mode, speech rate, etc.)</li>
+      <li>XP, game scores, completed activities, and recent session history</li>
+      <li>Local account credentials if you create an email-based account on this device (password is hashed in the browser for local use)</li>
+    </ul>
+    <p>We do not operate a permanent user database on our servers for this learning data. Clearing site data in your browser or using “Delete all data” in Settings removes it from that device.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">2. Real-person voice calls</h3>
+    <p>1-on-1 calls use <strong>WebRTC</strong> for audio between two browsers. Signalling (matchmaking and connection setup) is handled through our server over WebSocket while a call is being arranged or active. We do not record or store the audio of your conversations on our servers. Call audio is streamed peer-to-peer (or via standard WebRTC paths) for the duration of the call only.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">3. Microphone and speech recognition</h3>
+    <p>Microphone access is requested only when you start a voice feature. If your browser uses a speech-recognition service, that service may process audio according to the browser provider’s policies. We do not receive raw call audio for storage.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">4. AI conversation practice</h3>
+    <p>When AI Voice is available, the <strong>text</strong> of the conversation may be sent to the configured AI service (for example, a local Ollama instance or a service the operator has set up) to generate replies. This happens only when you use the AI feature.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">5. Google Sign-In</h3>
+    <p>If you choose “Continue with Google” and Google Sign-In is configured, Google’s authentication service processes your sign-in according to Google’s policies. We receive basic profile information needed to identify the session on this device. Configure Google OAuth only with your own Client ID; do not put secrets in frontend code.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">6. Cookies and similar technologies</h3>
+    <p>See our <button type="button" onclick="go('cookies')" class="text-indigo-600 font-semibold underline">Cookie Policy</button>. We use essential local storage for app function. We do not currently load third-party advertising cookies. If advertising or analytics is added later, this policy will be updated and, where required, consent will be requested.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">7. Your choices</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Export your data from Settings</li>
+      <li>Clear history, reset progress, or delete all local data</li>
+      <li>Contact us to request assistance with privacy questions</li>
+    </ul>
+    <h3 class="font-extrabold text-slate-900 text-base">8. Contact</h3>
+    <p>Privacy questions: <a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-semibold">mrt707174@gmail.com</a></p>
+  </div>
+</section>
+
+<!-- ================= TERMS ================= -->
+<section id="page-terms" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Terms and Conditions</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed">
+    <p class="text-xs text-slate-400">Last updated: October 2026</p>
+    <p>By using Real Call you agree to these terms.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">1. Service</h3>
+    <p>Real Call provides tools for practising spoken English: peer voice calls, optional AI conversation practice, learning games, and educational content. Features may change or be unavailable at times (for example, if no peer is online or if an AI service is offline).</p>
+    <h3 class="font-extrabold text-slate-900 text-base">2. Not professional advice</h3>
+    <p>Partner learners and AI characters are for practice only. They are not licensed teachers, doctors, or the real public figures some characters may be named after. Content is educational and illustrative, not a guarantee of exam results or fluency.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">3. Acceptable use</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Do not harass, threaten, or abuse other users during calls or chat</li>
+      <li>Do not share others’ personal data without permission</li>
+      <li>Do not use the service for unlawful content or activity</li>
+      <li>Do not attempt to disrupt matchmaking, servers, or other users’ sessions</li>
+    </ul>
+    <p>We may restrict access if we become aware of serious misuse. Report problems to <a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-semibold">mrt707174@gmail.com</a>.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">4. Accounts and data</h3>
+    <p>Guest and local account data is primarily stored in your browser. You are responsible for not sharing device access if you want your progress private. See the Privacy Policy for details.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">5. Intellectual property</h3>
+    <p>Original lessons, interface design, and branding of Real Call are provided for personal learning use. Do not scrape or republish content in bulk without permission.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">6. Disclaimer of warranty and liability</h3>
+    <p>The service is provided “as is”. To the fullest extent permitted by law, the operator is not liable for indirect or consequential losses arising from use of the service, including connection failures, lost progress stored only on a device, or content of peer conversations.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">7. Contact</h3>
+    <p><a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-semibold">mrt707174@gmail.com</a></p>
+  </div>
+</section>
+
+<!-- ================= COOKIE POLICY ================= -->
+<section id="page-cookies" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Cookie Policy</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed">
+    <p class="text-xs text-slate-400">Last updated: October 2026</p>
+    <p>Real Call uses browser <strong>local storage</strong> (and, if configured later, cookies) to keep the app working.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">Essential storage</h3>
+    <p>We store preferences, progress, and session information on your device so you can continue learning without creating a server-side profile. This is necessary for the core service.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">Advertising and analytics</h3>
+    <p>We do <strong>not</strong> currently load Google AdSense or third-party ad cookies. If advertising is enabled in the future, we will update this policy and, where required by law (for example in the EU/UK for non-essential cookies), seek appropriate consent before setting advertising or analytics cookies.</p>
+    <h3 class="font-extrabold text-slate-900 text-base">How to clear data</h3>
+    <p>You can clear site data in your browser settings or use “Delete all data” in Real Call Settings. That removes local progress for this site on that browser.</p>
+    <p>Questions: <a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-semibold">mrt707174@gmail.com</a></p>
+  </div>
+</section>
+
+<!-- ================= COMMUNITY GUIDELINES ================= -->
+<section id="page-community" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Community Guidelines</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed">
+    <p>Real Call connects learners for practice. Please follow these guidelines so everyone can learn safely.</p>
+    <ul class="list-disc pl-5 space-y-2">
+      <li><strong>Be respectful.</strong> Treat partners as fellow learners. No insults, harassment, or discrimination.</li>
+      <li><strong>Stay on learning topics.</strong> Use topic-based matchmaking for English practice. Do not pressure others for personal contact details.</li>
+      <li><strong>No illegal or harmful content.</strong> Do not share or request unlawful material.</li>
+      <li><strong>Protect privacy.</strong> Do not record calls without clear consent. Do not share screenshots of private chat in a way that identifies someone without permission.</li>
+      <li><strong>Report problems.</strong> Email <a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-semibold">mrt707174@gmail.com</a> to report abuse or technical issues.</li>
+    </ul>
+    <p>Serious or repeated violations may result in restricted access when we are able to act on reports.</p>
+  </div>
+</section>
+
+<!-- ================= SAFETY GUIDELINES ================= -->
+<section id="page-safety" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Safety Guidelines</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed">
+    <p>Tips for safer practice on Real Call:</p>
+    <ul class="list-disc pl-5 space-y-2">
+      <li><strong>Audio only.</strong> Real-person calls are voice-only by design. You do not need to show video.</li>
+      <li><strong>Do not share sensitive personal information</strong> (home address, financial details, passwords) with strangers.</li>
+      <li><strong>End the call</strong> if you feel uncomfortable. Use mute and leave when needed.</li>
+      <li><strong>Minors:</strong> If you are under the age of digital consent in your country, use the service only with a parent or guardian’s guidance.</li>
+      <li><strong>Report abuse</strong> to <a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-semibold">mrt707174@gmail.com</a> with as much detail as you can (without spreading others’ private data further).</li>
+    </ul>
+    <p>We cannot monitor every live conversation in real time. Your caution and reporting help keep the community safer.</p>
+  </div>
+</section>
+
+<!-- ================= DISCLAIMER ================= -->
+<section id="page-disclaimer" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Disclaimer</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed">
+    <p>Real Call is an educational practice tool. Information and conversations on the site are for learning English and general improvement only.</p>
+    <ul class="list-disc pl-5 space-y-2">
+      <li>We do not guarantee fluency, exam scores, job outcomes, or any specific learning result.</li>
+      <li>AI characters and named personas are fictional practice partners, not the real individuals.</li>
+      <li>Peer users are independent learners; we are not responsible for what they say.</li>
+      <li>External links (for example Instagram) are provided for convenience; their content is not controlled by Real Call.</li>
+    </ul>
+    <p>Use your own judgment and official resources for exams, immigration, medical, or legal matters.</p>
+  </div>
+</section>
+
+<!-- ================= HELP / FAQ ================= -->
+<section id="page-help" class="page hidden max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-extrabold">Help &amp; FAQ</h2>
+    <button onclick="go('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800">← Home</button>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-5 text-sm text-slate-700 leading-relaxed">
+    <div>
+      <h3 class="font-extrabold text-slate-900">How do 1v1 Real Calls work?</h3>
+      <p class="mt-1">Both users open Real Call, choose a topic, and press Start. When two people are searching for the same topic (or compatible queue), the server matches them and WebRTC connects audio. Allow microphone permission. Calls are audio-only.</p>
+    </div>
+    <div>
+      <h3 class="font-extrabold text-slate-900">Why can’t I hear the other person?</h3>
+      <p class="mt-1">Check microphone permission, speaker control, and network. Some strict firewalls need a TURN server (optional; configure in code if required). Try Chrome or Edge. Both users must be connected to the same Real Call server.</p>
+    </div>
+    <div>
+      <h3 class="font-extrabold text-slate-900">Does AI work without internet?</h3>
+      <p class="mt-1">AI replies need the configured AI service (for example Ollama on the server). Games and local lessons can still be used offline in many cases. Google Login and live peer calls need internet.</p>
+    </div>
+    <div>
+      <h3 class="font-extrabold text-slate-900">Where is my progress stored?</h3>
+      <p class="mt-1">In your browser’s local storage on that device. Export or delete it from Settings.</p>
+    </div>
+    <div>
+      <h3 class="font-extrabold text-slate-900">How do I report abuse?</h3>
+      <p class="mt-1">Email <a href="mailto:mrt707174@gmail.com" class="text-indigo-600 font-semibold">mrt707174@gmail.com</a> with a short description. See Safety and Community Guidelines.</p>
+    </div>
+    <div>
+      <h3 class="font-extrabold text-slate-900">Is there a Premium plan?</h3>
+      <p class="mt-1">Paid Premium is not implemented yet. Public educational content and core practice tools are available without a paid plan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LEARN ENGLISH / RESOURCES ================= -->
+<section id="page-resources" class="page hidden max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 space-y-6">
+  <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+    <h2 class="text-lg font-extrabold flex items-center gap-2"><i data-lucide="book-open" class="w-5 h-5 text-indigo-600"></i> English Learning Resources</h2>
+    <p class="text-xs text-slate-500 mt-1">Original lessons for spoken English, grammar, vocabulary and practice. Free to read — no login required for these pages.</p>
+  </div>
+  <div id="resources-list" class="grid sm:grid-cols-2 gap-4"></div>
+  <div id="lesson-view" class="hidden bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-sm text-slate-700 leading-relaxed"></div>
+</section>
+
+<!-- ================= GAMES ================= -->
+<section id="page-games" class="page hidden max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 space-y-6">
+  <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-lg font-extrabold flex items-center gap-2"><i data-lucide="gamepad-2" class="w-5 h-5 text-violet-600"></i> English Learning Games</h2>
+      <p class="text-xs text-slate-500"><span id="qbank-count">1,000+ questions</span> in 12 games. You earn 10 XP for every correct answer.</p>
+    </div>
+    <div class="flex items-center gap-2 bg-violet-50 border border-violet-200 px-3 py-1.5 rounded-xl text-xs font-bold text-violet-700 self-start sm:self-auto">🏆 XP: <span id="game-xp">0</span></div>
+  </div>
+  <div class="grid grid-cols-3 gap-3">
+    <div class="bg-white p-3 rounded-xl border border-slate-200/80 shadow-sm text-center"><p class="text-[10px] font-semibold text-slate-400">Completed</p><h3 id="stat-completed" class="text-base font-extrabold">0 / 8</h3></div>
+    <div class="bg-white p-3 rounded-xl border border-slate-200/80 shadow-sm text-center"><p class="text-[10px] font-semibold text-slate-400">Avg. Best</p><h3 id="stat-best" class="text-base font-extrabold">—</h3></div>
+    <div class="bg-white p-3 rounded-xl border border-slate-200/80 shadow-sm text-center"><p class="text-[10px] font-semibold text-slate-400">Played Today</p><h3 id="stat-played" class="text-base font-extrabold">0</h3></div>
+  </div>
+  <div id="game-menu" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+  <div id="game-box" class="hidden bg-white rounded-2xl border border-slate-200/80 shadow-md p-5 sm:p-6 space-y-5 pop">
+    <div class="flex items-center justify-between gap-3">
+      <button onclick="closeGame()" class="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 shrink-0"><i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Games</button>
+      <div id="game-title" class="text-sm font-extrabold truncate"></div>
+      <div id="game-label" class="text-xs font-bold text-violet-600 shrink-0">1 of 5</div>
+    </div>
+    <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden"><div id="game-bar" class="h-full rounded-full transition-all duration-500" style="width:0%"></div></div>
+    <div id="game-timer" class="hidden text-center text-sm font-extrabold text-rose-600"></div>
+    <div id="game-instr" class="text-center text-[11px] uppercase font-bold tracking-wider text-slate-400"></div>
+    <div id="game-area" class="min-h-[160px] flex flex-col justify-center"></div>
+    <div id="game-feedback"></div>
+  </div>
+</section>
+
+<!-- ================= AI VOICE: CHARACTER PICKER ================= -->
+<section id="page-ai" class="page hidden max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 space-y-5">
+  <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-5 sm:p-6 text-white shadow-lg">
+    <h2 class="text-xl font-extrabold">Real-time AI Voice Call</h2>
+    <p class="text-xs text-emerald-50 mt-1 max-w-xl">Pick a character, press <b>Start Call</b>, then just talk. The character listens, replies out loud, and waits for your turn. Captions show what you and they say.</p>
+    <p id="ai-voice-support" class="text-[11px] mt-3 bg-white/15 inline-block px-3 py-1.5 rounded-lg"></p>
+  </div>
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Choose a character <span id="char-count" class="text-slate-400 normal-case font-semibold"></span></h4>
+    <input id="char-search" oninput="renderCharGrid(true)" placeholder="Search name or field…" class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs w-full sm:w-56 focus:outline-none focus:border-emerald-400">
+  </div>
+  <div id="char-tabs" class="flex gap-2 overflow-x-auto no-scrollbar pb-1"></div>
+  <div id="char-grid" class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 gap-3"></div>
+  <div class="text-center"><button id="char-more" onclick="moreChars()" class="hidden text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-xl">Show more characters</button></div>
+</section>
+
+</main>
+
+<!-- ================= AI VOICE: LIVE CALL SCREEN ================= -->
+<section id="ai-screen" class="call-page hidden">
+  <div class="call-card">
+    <div id="ai-live" class="view on flex-col h-full p-4 sm:p-5 gap-3 min-h-0">
+      <div class="flex items-center justify-between">
+        <span id="ai-state-pill" class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/10 border border-white/10">
+          <span id="ai-state-dot" class="w-1.5 h-1.5 rounded-full bg-slate-400"></span><span id="ai-state-text">Connecting</span>
+        </span>
+        <div id="ai-timer" class="font-mono text-sm font-bold bg-white/10 px-3 py-1.5 rounded-full">00:00</div>
+      </div>
+
+      <div class="flex flex-col items-center gap-3 pt-1">
+        <button id="ai-avatar" onclick="aiInterrupt()" class="relative w-24 h-24 rounded-full font-extrabold text-2xl text-white flex items-center justify-center shadow-2xl ring-4 ring-white/10 bg-gradient-to-br from-indigo-500 to-violet-600" aria-label="Tap to interrupt and speak">
+          <span id="ai-init">SK</span>
+        </button>
+        <div class="text-center">
+          <p id="ai-name" class="font-extrabold text-base">Salman Khan</p>
+          <p id="ai-field" class="text-[11px] text-indigo-200/80">Actors & Actresses</p>
+        </div>
+        <div id="ai-wave" class="wave"><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+        <p id="ai-hint" class="text-[10px] text-slate-400 -mt-1">Tap the character to interrupt</p>
+      </div>
+
+      <div class="flex-1 min-h-0 flex flex-col justify-end gap-3 overflow-y-auto no-scrollbar">
+        <div id="ai-caption-ai" class="caption-in bg-white/10 rounded-2xl px-4 py-3">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-300 mb-1" id="ai-cap-label">Character</p>
+          <p id="ai-cap-text" class="text-sm leading-relaxed text-white">Starting the call…</p>
+        </div>
+        <div id="ai-caption-me" class="rounded-2xl px-4 py-2.5 bg-white/5 border border-white/10">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-indigo-300 mb-0.5">You</p>
+          <p id="ai-you-text" class="text-xs text-slate-200 min-h-[16px]">—</p>
+        </div>
+        <div id="ai-tip" class="hidden text-[11px] bg-amber-400/10 border border-amber-400/30 text-amber-100 rounded-xl px-3 py-2"></div>
+        <form id="ai-fallback" class="hidden flex items-center gap-2" onsubmit="event.preventDefault(); aiTyped();">
+          <input id="ai-input" autocomplete="off" placeholder="Voice not supported here. Type your answer…" class="flex-1 min-w-0 bg-white/10 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400">
+          <button class="w-11 h-11 rounded-xl bg-emerald-600 flex items-center justify-center shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
+        </form>
+      </div>
+
+      <div class="flex items-center justify-center gap-4 pt-1">
+        <button id="ai-mute" onclick="aiToggleMute()" class="ctrl on" aria-label="Microphone"><i data-lucide="mic" class="w-5 h-5"></i></button>
+        <button onclick="aiEnd()" class="big-btn danger" style="min-width:150px; height:54px"><i data-lucide="phone-off" class="w-4 h-4"></i> End Call</button>
+        <button id="ai-spk" onclick="aiToggleSpeaker()" class="ctrl on" aria-label="Speaker"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+      </div>
+    </div>
+
+    <div id="ai-summary" class="view flex-col h-full overflow-y-auto no-scrollbar p-5 sm:p-6"></div>
+  </div>
+</section>
+
+<!-- ================= SIGN IN / CREATE ACCOUNT / GUEST ================= -->
+<section id="auth-screen" class="fixed inset-0 z-[60] bg-gradient-to-br from-indigo-950 via-slate-900 to-violet-950 text-white">
+  <div class="pointer-events-none absolute inset-0 overflow-hidden">
+    <div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-indigo-500/30 blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-16 w-72 h-72 rounded-full bg-violet-500/30 blur-3xl"></div>
+  </div>
+  <div class="auth-wrap relative">
+    <div class="w-full max-w-5xl grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
+
+      <div class="auth-hero space-y-4 text-center lg:text-left hidden lg:block">
+        <div class="inline-flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center"><i data-lucide="phone-call" class="w-5 h-5"></i></div>
+          <span class="text-xl font-extrabold tracking-tight">Real Call</span>
+        </div>
+        <h1 class="text-3xl xl:text-4xl font-extrabold leading-tight">Speak English with confidence.</h1>
+        <p class="text-indigo-100/90 text-sm max-w-md">Practise out loud with real learners and AI voice characters. Play games that lock in new words.</p>
+        <div class="flex flex-wrap gap-2 text-[11px] font-bold">
+          <span class="px-3 py-1.5 rounded-full bg-white/10 border border-white/15">🎙️ Real 1v1 calls</span>
+          <span class="px-3 py-1.5 rounded-full bg-white/10 border border-white/15">🤖 AI characters</span>
+          <span class="px-3 py-1.5 rounded-full bg-white/10 border border-white/15">🧩 Learning games</span>
+        </div>
+      </div>
+
+      <div class="auth-card bg-white text-slate-900 rounded-3xl shadow-2xl p-5 sm:p-7 w-full max-w-md mx-auto">
+        <div class="auth-tabs grid grid-cols-2 bg-slate-100 rounded-xl p-1 mb-4">
+          <button id="tab-in" onclick="authTab('in')" class="auth-tab py-2.5 rounded-lg text-sm font-bold">Sign in</button>
+          <button id="tab-up" onclick="authTab('up')" class="auth-tab py-2.5 rounded-lg text-sm font-bold">Create account</button>
+        </div>
+        <h2 id="auth-title" class="text-lg font-extrabold">Welcome back</h2>
+        <p id="auth-sub" class="text-xs text-slate-500 mt-0.5 mb-3">Sign in to continue your progress.</p>
+
+        <form id="auth-form" onsubmit="submitAuth(event)" class="space-y-3" novalidate>
+          <div id="f-name-wrap" class="hidden">
+            <label for="f-name" class="field-label">Full name</label>
+            <input id="f-name" class="field" autocomplete="name" maxlength="40" placeholder="e.g. Maria Garcia">
+          </div>
+          <div>
+            <label for="f-email" class="field-label">Email</label>
+            <input id="f-email" type="email" class="field" autocomplete="email" placeholder="you@example.com">
+          </div>
+          <div>
+            <label for="f-pass" class="field-label">Password</label>
+            <div class="relative">
+              <input id="f-pass" type="password" class="field pr-16" autocomplete="current-password" placeholder="At least 6 characters">
+              <button type="button" onclick="togglePass()" id="pass-eye" class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-xs font-bold text-slate-500 hover:text-slate-800">Show</button>
+            </div>
+          </div>
+          <p id="auth-err" class="hidden text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2"></p>
+          <button id="auth-submit" type="submit" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition-colors">Sign in</button>
+        </form>
+
+        <div class="flex items-center gap-3 my-3 text-[11px] text-slate-400 font-semibold"><span class="flex-1 h-px bg-slate-200"></span>or<span class="flex-1 h-px bg-slate-200"></span></div>
+
+        <button onclick="googleSignIn()" class="w-full py-3 rounded-xl border-2 border-slate-200 hover:bg-slate-50 text-slate-800 font-bold text-sm flex items-center justify-center gap-2 transition-colors">
+          <span class="g-badge">G</span> Continue with Google
+        </button>
+        <div id="google-btn" class="flex justify-center mt-2 empty:hidden"></div>
+
+        <button onclick="guestLogin()" class="w-full mt-2.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors">
+          <i data-lucide="user-round" class="w-4 h-4"></i> Continue as Guest
+        </button>
+        <p class="auth-extra text-[10px] text-slate-400 text-center mt-3">Guest progress stays in this browser · Terms in Settings</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* =====================================================================
+   REAL CALL - application logic (v4)
+   ===================================================================== */
+
+/* OPTIONAL: live AI brain. Leave '' to use the built-in conversation engine.
+   Set to your own server route (see the README notes) that forwards the
+   conversation to an AI model. Your API key must stay on the server. */
+const AI_ENDPOINT = '/api/ai';  // set '' to force offline localReply only
+const AI_TIMEOUT_MS = 8000;
+
+/* ---------- Persistent progress (per browser) ---------- */
+let STORE_KEY = 'realcall.v4';
+const DEFAULT_PROFILE = { name: 'Tarique Choudhary', level: 'B2', mode: 'relaxed', theme: 'light', accent: 'en-US', rate: 0.97, autoListen: true };
+const DEFAULT_STATE = { xp: 1240, homeXP: 3450, bests: {}, completed: [], history: [], gamesToday: 0, profile: DEFAULT_PROFILE };
+let S = loadState();
+S.profile = Object.assign({}, DEFAULT_PROFILE, S.profile || {});
+function loadState() {
+  try { const raw = localStorage.getItem(STORE_KEY); return raw ? Object.assign({}, DEFAULT_STATE, JSON.parse(raw)) : Object.assign({}, DEFAULT_STATE); }
+  catch (e) { return Object.assign({}, DEFAULT_STATE); }
+}
+function saveState() { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) {} }
+
+/* ---------- Helpers ---------- */
+const $ = id => document.getElementById(id);
+const icons = () => { if (window.lucide) lucide.createIcons(); };
+const pad = n => String(n).padStart(2, '0');
+const fmt = sec => pad(Math.floor(sec / 60)) + ':' + pad(sec % 60);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const norm = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+const wordCount = s => s.trim().split(/\s+/).filter(Boolean).length;
+function shuffle(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2400); }
+
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+const canSpeakOut = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+
+/* ---------- Navigation ---------- */
+let currentPage = 'home';
+function busy() { return (peer !== null) || (aiCall !== null); }
+function go(page) {
+  if (busy() && page !== currentPage) {
+    if (!confirm('A call is in progress. End it and leave this page?')) return;
+    if (peer) endPeer(true); if (aiCall) aiEnd(true);
+  }
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+  const pageEl = $('page-' + page);
+  if (pageEl) pageEl.classList.remove('hidden');
+  else { const home = $('page-home'); if (home) home.classList.remove('hidden'); currentPage = 'home'; }
+  document.body.classList.toggle('call-mode', page === 'call');
+  document.querySelectorAll('.nav-d').forEach(b => {
+    const on = b.dataset.nav === page;
+    b.className = 'nav-d w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all ' + (on ? 'bg-indigo-50 text-indigo-600' : 'text-slate-600 hover:bg-slate-50');
+  });
+  document.querySelectorAll('.nav-m').forEach(b => {
+    const on = b.dataset.mnav === page;
+    b.className = 'nav-m flex flex-col items-center gap-1 transition-colors ' + (on ? 'text-indigo-600' : 'text-slate-400');
+  });
+  if (page === 'home') renderHome();
+  if (page === 'games') renderGameMenu();
+  if (page === 'ai') renderAiSupport();
+  if (page === 'settings') { renderSettings(); renderAccount(); }
+  if (page === 'resources') renderResources();
+  if (page !== 'call') window.scrollTo({ top: 0, behavior: 'smooth' });
+  icons();
+}
+
+function openContactMail() {
+  const sub = ($('contact-subject') && $('contact-subject').value || 'Real Call support').trim();
+  const body = ($('contact-body') && $('contact-body').value || '').trim();
+  const mailto = 'mailto:mrt707174@gmail.com?subject=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(body);
+  window.location.href = mailto;
+}
+
+/* ---------- English Learning Resources (original short lessons) ---------- */
+const LESSONS = [
+  {
+    id: 'beginners-spoken',
+    cat: 'Spoken English for Beginners',
+    title: 'Your First Spoken English Sentences',
+    intro: 'Start speaking with a small set of clear, useful sentences you can use every day.',
+    body: '<p>When you begin spoken English, focus on short, correct sentences rather than long speeches. Practice saying them aloud.</p><h4 class="font-bold text-slate-900 mt-4">Useful starters</h4><ul class="list-disc pl-5 space-y-1"><li><em>Hello, my name is…</em></li><li><em>Nice to meet you.</em></li><li><em>How are you today?</em></li><li><em>I am learning English.</em></li><li><em>Could you please repeat that?</em></li></ul><h4 class="font-bold text-slate-900 mt-4">Practice tip</h4><p>Record yourself saying each line slowly, then at a natural speed. Listen once and note one word to improve.</p><p class="mt-3 text-slate-500">Next: try a 1v1 Real Call on “Introductions” or open Daily Use Sentences.</p>'
+  },
+  {
+    id: 'daily-sentences',
+    cat: 'Daily Use English Sentences',
+    title: 'Everyday Sentences for Shopping and Food',
+    intro: 'Practical lines for shops, cafés and ordering food.',
+    body: '<p>These sentences work in many English-speaking contexts.</p><ul class="list-disc pl-5 space-y-1"><li><em>How much does this cost?</em></li><li><em>Do you accept card payment?</em></li><li><em>I would like a glass of water, please.</em></li><li><em>Is this available in a smaller size?</em></li><li><em>Could I have the bill, please?</em></li></ul><h4 class="font-bold text-slate-900 mt-4">Grammar note</h4><p><strong>Would like</strong> is more polite than <strong>want</strong> when ordering.</p>'
+  },
+  {
+    id: 'grammar-present',
+    cat: 'English Grammar Lessons',
+    title: 'Present Simple vs Present Continuous',
+    intro: 'A clear difference that many learners mix up in conversation.',
+    body: '<p><strong>Present simple</strong> is for habits and facts: <em>I work from home.</em></p><p><strong>Present continuous</strong> is for actions happening now: <em>I am working on a project this week.</em></p><h4 class="font-bold text-slate-900 mt-4">Quick check</h4><ul class="list-disc pl-5 space-y-1"><li>Every morning I ___ tea. → <em>drink</em></li><li>Quiet please — the baby ___ . → <em>is sleeping</em></li></ul>'
+  },
+  {
+    id: 'vocab-work',
+    cat: 'Vocabulary Building',
+    title: 'Work and Study Vocabulary',
+    intro: 'High-frequency words for talking about jobs and learning.',
+    body: '<p>Learn words in short phrases.</p><ul class="list-disc pl-5 space-y-1"><li><em>deadline</em> — last day to finish something</li><li><em>to apply for a job</em></li><li><em>flexible hours</em></li><li><em>to revise for an exam</em></li><li><em>group project</em></li></ul><p class="mt-2">Write five sentences about your own work or study using three of these words, then say them aloud.</p>'
+  },
+  {
+    id: 'pronunciation-th',
+    cat: 'Pronunciation Practice',
+    title: 'The “th” Sounds in English',
+    intro: 'Two common sounds that do not exist in many languages.',
+    body: '<p>Soft <strong>th</strong> as in <em>think, three</em>; voiced <strong>th</strong> as in <em>this, the, mother</em>.</p><p>Practice pairs: <em>think / sink</em> · <em>three / tree</em>. Slow practice is better than fast, unclear practice.</p>'
+  },
+  {
+    id: 'conversation-cafe',
+    cat: 'English Conversation Examples',
+    title: 'Short Café Conversation',
+    intro: 'A simple dialogue you can adapt in real life or in a practice call.',
+    body: '<p><strong>A:</strong> Hi. Could I get a cappuccino, please?<br><strong>B:</strong> Sure. Anything else?<br><strong>A:</strong> No, that’s all. How much is that?<br><strong>B:</strong> Three fifty, please.<br><strong>A:</strong> Here you are. Thank you.</p><p class="mt-2">Change the drink and the price. Practise both roles in a Real Call.</p>'
+  },
+  {
+    id: 'common-mistakes',
+    cat: 'Common English Mistakes',
+    title: '“Information” and Other Uncountable Nouns',
+    intro: 'Avoid “informations”, “advices”, and similar forms.',
+    body: '<p>Some nouns are usually uncountable. We do not add <em>-s</em>.</p><ul class="list-disc pl-5 space-y-1"><li>Correct: <em>some information</em> / <em>a piece of information</em></li><li>Correct: <em>advice</em> (not <em>advices</em>)</li><li>Correct: <em>homework</em> (not <em>homeworks</em>)</li></ul>'
+  },
+  {
+    id: 'interview-english',
+    cat: 'Interview English',
+    title: 'Answering “Tell me about yourself”',
+    intro: 'A simple structure for job or internship interviews.',
+    body: '<p>Keep the answer under one minute: (1) present role, (2) relevant past, (3) why this opportunity.</p><p><em>Example:</em> “I am a final-year student in computer science. Last summer I completed an internship on a small web project. I am applying because I want to improve teamwork and coding skills.”</p>'
+  },
+  {
+    id: 'students-essay',
+    cat: 'English for Students',
+    title: 'Linking Words for Clear Writing and Speaking',
+    intro: 'Connect ideas so your answers sound organised.',
+    body: '<p>Useful links: <em>first, then, however, for example, in addition, finally, because, so</em>.</p><p><em>I enjoy group study. However, I sometimes prefer quiet libraries when I revise for exams.</em></p>'
+  },
+  {
+    id: 'listening-speaking',
+    cat: 'Listening and Speaking Exercises',
+    title: 'Shadowing: Copy a Short Clip',
+    intro: 'A practical exercise you can do with any short English audio.',
+    body: '<p><strong>Shadowing</strong> means listening and speaking at almost the same time as the speaker.</p><ol class="list-decimal pl-5 space-y-1"><li>Choose 20–40 seconds of clear English.</li><li>Listen once without speaking.</li><li>Play again and speak along.</li><li>Repeat the same clip for a few days.</li></ol><p>Also practise interactive speaking with Real Call.</p>'
+  },
+  {
+    id: 'quiz-basics',
+    cat: 'Practical English Quizzes',
+    title: 'Quick Self-Check: Articles a / an / the',
+    intro: 'Test yourself, then check the answers below.',
+    body: '<p>1) I saw ___ interesting film yesterday. (a / an / the)<br>2) ___ sun rises in the east.<br>3) She is ___ engineer.</p><p class="mt-2"><strong>Answers:</strong> 1) an  2) The  3) an — use <em>an</em> before a vowel sound.</p>'
+  },
+  {
+    id: 'guide-30-days',
+    cat: 'Step-by-Step English Learning Guides',
+    title: 'A Simple 4-Week Speaking Plan',
+    intro: 'A realistic plan if you can practise about 20–30 minutes a day.',
+    body: '<p><strong>Week 1:</strong> Daily sentences + one beginner lesson. Speak aloud 10 minutes.</p><p><strong>Week 2:</strong> Add one game daily and one short conversation (AI or peer).</p><p><strong>Week 3:</strong> Topic calls; note five new phrases each session.</p><p><strong>Week 4:</strong> Review mistakes and do two longer calls.</p><p>Consistency matters more than perfection.</p>'
+  }
+];
+
+function renderResources() {
+  const list = $('resources-list');
+  const view = $('lesson-view');
+  if (!list) return;
+  view.classList.add('hidden');
+  list.classList.remove('hidden');
+  list.innerHTML = LESSONS.map(function(L) {
+    return '<button type="button" onclick="openLesson(\'' + L.id + '\')" class="text-left bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 hover:border-indigo-300 transition-colors">' +
+      '<p class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">' + esc(L.cat) + '</p>' +
+      '<h3 class="font-extrabold text-sm mt-1 text-slate-900">' + esc(L.title) + '</h3>' +
+      '<p class="text-xs text-slate-500 mt-2 line-clamp-2">' + esc(L.intro) + '</p>' +
+      '<span class="inline-block mt-3 text-[11px] font-bold text-indigo-600">Read lesson →</span></button>';
+  }).join('');
+}
+
+function openLesson(id) {
+  const L = LESSONS.find(function(x) { return x.id === id; });
+  if (!L) return;
+  const list = $('resources-list');
+  const view = $('lesson-view');
+  list.classList.add('hidden');
+  view.classList.remove('hidden');
+  view.innerHTML =
+    '<button type="button" onclick="renderResources()" class="text-xs font-bold text-slate-500 hover:text-slate-800 mb-2">← All lessons</button>' +
+    '<p class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">' + esc(L.cat) + '</p>' +
+    '<h2 class="text-xl font-extrabold text-slate-900 mt-1">' + esc(L.title) + '</h2>' +
+    '<p class="text-slate-600 mt-2">' + esc(L.intro) + '</p>' +
+    '<div class="mt-4 border-t border-slate-100 pt-4">' + L.body + '</div>' +
+    '<div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-2">' +
+      '<button type="button" onclick="go(\'call\')" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">Practice in 1v1 Call</button>' +
+      '<button type="button" onclick="go(\'games\')" class="px-4 py-2 rounded-xl bg-violet-100 text-violet-800 text-xs font-bold">Play a game</button>' +
+      '<button type="button" onclick="renderResources()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">More lessons</button>' +
+    '</div>';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  icons();
+}
+
+/* ---------- Home ---------- */
+function renderHome() {
+  $('home-xp').textContent = S.homeXP.toLocaleString();
+  $('home-calls').textContent = S.history.length;
+  const box = $('home-history');
+  if (!S.history.length) { box.innerHTML = '<p class="text-xs text-slate-400">No sessions yet. Start a call to see your history here.</p>'; return; }
+  box.innerHTML = S.history.slice(0, 4).map(h => `
+    <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
+      <div class="w-9 h-9 rounded-lg ${h.mode === 'peer' ? 'bg-indigo-100 text-indigo-600' : 'bg-emerald-100 text-emerald-600'} flex items-center justify-center text-[10px] font-extrabold">${h.mode === 'peer' ? '1v1' : 'AI'}</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-bold truncate">${esc(h.title)}</p>
+        <p class="text-[10px] text-slate-500">${new Date(h.date).toLocaleDateString()} · ${fmt(h.duration)} · ${h.turns} turns · ${h.words} words</p>
+      </div>
+      <div class="text-amber-400 text-xs font-bold">${h.rating ? '★ ' + h.rating : ''}</div>
+    </div>`).join('');
+}
+function clearHistory() { if (!confirm('Clear your recent session history?')) return; S.history = []; saveState(); renderHome(); toast('History cleared'); }
+function recordSession(rec) {
+  S.history.unshift(Object.assign({ date: Date.now() }, rec));
+  S.history = S.history.slice(0, 30);
+  const xp = Math.min(50, rec.turns * 5);
+  S.xp += xp; S.homeXP += xp;
+  saveState();
+  return xp;
+}
+
+/* =====================================================================
+   CONVERSATION ENGINE
+   ===================================================================== */
+const TOPICS = {
+  daily:  { label: 'Daily Routine',   prompts: ['What did you do this morning?', 'Describe your typical weekday.', 'What time do you usually go to bed, and why?'] },
+  work:   { label: 'Work & Goals',    prompts: ['What do you do for work or study?', 'Where do you want to be in five years?', 'What skill are you improving right now?'] },
+  travel: { label: 'Travel',          prompts: ['Where is the best place you have visited?', 'Would you rather travel by train or by plane?', 'What do you pack for a trip?'] },
+  movies: { label: 'Movies & Music',  prompts: ['What was the last film you enjoyed?', 'Who is your favourite singer, and why?', 'Would you rather watch a comedy or a thriller?'] },
+  free:   { label: 'Free Talk',       prompts: ['What made you smile this week?', 'If you could learn any skill, what would it be?', 'What is something you are curious about?'] }
+};
+const CORRECTIONS = [
+  { re: /\bi am agree\b/i,     note: 'Say "I agree". Agree is a verb, so no "am".' },
+  { re: /\bdiscuss about\b/i,  note: 'Say "discuss" with no preposition: "discuss the problem".' },
+  { re: /\bmore better\b/i,    note: '"Better" is already comparative, so drop "more".' },
+  { re: /\bsince two days\b/i, note: 'Use "for" with durations: "for two days". "Since" is for a start point.' },
+  { re: /\bi am boring\b/i,    note: 'Use "bored" for feelings: "I am bored". "Boring" describes things.' },
+  { re: /\bmarry with\b/i,     note: '"Marry" takes no preposition: "marry him".' },
+  { re: /\bhe don'?t\b/i,      note: 'With he, she or it, use "doesn\'t".' },
+  { re: /\bshe go\b/i,         note: 'With he, she or it, add -es or -s: "she goes".' },
+  { re: /\bi have went\b/i,    note: 'After "have", use the past participle: "I have gone".' },
+  { re: /\bdifferent than\b/i, note: 'Prefer "different from" in standard English.' },
+  { re: /\bevery days\b/i,     note: '"Every day" (singular) is correct for daily actions.' }
+];
+const NUDGES = ['Can you say a bit more? Try a full sentence.', 'Nice start! Add one more detail, please.', 'Good! Now tell me why.'];
+const ACKS = ['That sounds great.', 'I see what you mean.', 'Interesting!', 'Good point.', 'Thank you for sharing that.', 'Wow, really?'];
+const FOLLOW_UPS = [
+  'Can you tell me more about that?',
+  'What made you decide that?',
+  'How do you usually spend your weekends?',
+  'What would you change about it?',
+  'Tell me about the last time that happened.',
+  'Can you describe it in three sentences?',
+  'What was the best part for you?'
+];
+const FIELD_QUESTIONS = {
+  'Actors & Actresses':  ['If you could star in any film, which one would it be?', 'How do you prepare before a big performance?'],
+  'Medical & Doctors':   ['How do you explain a diagnosis to a worried patient?', 'What is the most important habit for staying healthy?'],
+  'Engineering & Tech':  ['What is the biggest challenge in your current project?', 'How would you explain your work to a child?'],
+  'Education & Faculty': ['Which English word would you like to master this week?', 'How do you learn best: reading, listening or speaking?'],
+  'Business & Science':  ['How would you pitch your idea in one minute?', 'What question would you ask an investor?']
+};
+const OPENERS = {
+  'Actors & Actresses':  'Lights, camera, English! What movie have you watched recently?',
+  'Medical & Doctors':   'Hello, I am your English doctor for today. How are you feeling?',
+  'Engineering & Tech':  'Hi there! Let us talk about your work. What are you building these days?',
+  'Education & Faculty': 'Welcome to class! Tell me one thing you did this week.',
+  'Business & Science':  'Good to meet you. Let us practise a business conversation. What do you do for work?'
+};
+let followIdx = 0;
+function nextFollowUp(field) {
+  const pool = field && FIELD_QUESTIONS[field] ? FOLLOW_UPS.concat(FIELD_QUESTIONS[field]) : FOLLOW_UPS;
+  followIdx = (followIdx + 1) % pool.length;
+  return pool[followIdx];
+}
+/* Built-in responder: character-aware (used when Ollama / AI_ENDPOINT is offline) */
+function personaStyle(name, field) {
+  const n = (name || '').toLowerCase();
+  if (/salman|shahrukh|shah rukh|deepika|priyanka|tom cruise|leonardo|scarlett|brad|robert downey|emma watson/.test(n))
+    return 'celebrity';
+  if (/house|dr\.|doctor|medical|surgeon|cardiologist/.test(n) || field === 'Medical & Doctors')
+    return 'doctor';
+  if (/keating|professor|tutor|clara|oswald|education/.test(n) || field === 'Education & Faculty')
+    return 'teacher';
+  if (/alex mercer|elena|architect|scientist|engineering|tech/.test(n) || field === 'Engineering & Tech')
+    return 'engineer';
+  if (field === 'Business & Science') return 'business';
+  return 'friendly';
+}
+function localReply(text, field, turn, charName) {
+  const t = text.toLowerCase();
+  const style = personaStyle(charName, field);
+  const name = charName || 'your partner';
+  if (wordCount(text) < 3) return NUDGES[turn % NUDGES.length];
+  if (/\b(bye|goodbye|see you)\b/.test(t)) {
+    if (style === 'celebrity') return `Great chatting with you! Keep shining and practise every day. — ${name}`;
+    if (style === 'doctor') return 'Session complete. Keep practising — consistency is the best medicine. Take care.';
+    if (style === 'teacher') return 'Excellent effort today. Homework: practise out loud for ten minutes. See you next class!';
+    return 'It was great talking with you. Keep practising every day!';
+  }
+  if (/\b(hi|hello|hey)\b/.test(t)) {
+    if (style === 'celebrity') return `Hey! ${name} here. Love the energy — tell me what you are working on.`;
+    if (style === 'doctor') return `Hello. I am ${name}. How are you feeling today, and what shall we practise?`;
+    if (style === 'teacher') return `Welcome! I am ${name}. Ready for a short speaking exercise?`;
+    if (style === 'engineer') return `Hi — ${name}. What are you building or learning right now?`;
+    return `Hello! I am ${name}. Lovely to hear from you. ` + nextFollowUp(field);
+  }
+  if (/\bthank(s| you)\b/.test(t)) {
+    if (style === 'celebrity') return "You're welcome, star! " + nextFollowUp(field);
+    if (style === 'doctor') return 'Of course. Now, can you explain that idea in one clear sentence?';
+    return "You're welcome! " + nextFollowUp(field);
+  }
+  if (/\b(my name is|i am|i'm)\b/.test(t)) return `Nice to meet you! I am ${name}. ` + nextFollowUp(field);
+
+  // Style-flavoured acknowledgements
+  const styleAcks = {
+    celebrity: ['Love that!', 'That is pure cinema.', 'Tell me more — I am listening.', 'What a story!'],
+    doctor: ['Understood.', 'Interesting symptom — of language, of course.', 'Clear so far.', 'Let us dig a little deeper.'],
+    teacher: ['Good sentence structure.', 'Nice vocabulary choice.', 'Almost perfect — keep going.', 'Well said.'],
+    engineer: ['Solid point.', 'That scales.', 'Interesting approach.', 'Walk me through the details.'],
+    business: ['Good pitch.', 'Clear value.', 'Tell me the impact.', 'What is the next step?'],
+    friendly: ACKS
+  };
+  const pool = styleAcks[style] || ACKS;
+  return pool[turn % pool.length] + ' ' + nextFollowUp(field);
+}
+function analyse(text) {
+  return {
+    words: wordCount(text),
+    cleaned: text.toLowerCase().split(/\s+/).map(w => w.replace(/[^a-z']/g, '')).filter(Boolean),
+    hits: CORRECTIONS.filter(c => c.re.test(text))
+  };
+}
+
+/* =====================================================================
+   SPEECH HELPERS
+   ===================================================================== */
+function makeRecognizer() {
+  if (!SpeechRec) return null;
+  const r = new SpeechRec();
+  r.lang = 'en-US';
+  r.continuous = false;
+  r.interimResults = true;
+  r.maxAlternatives = 1;
+  return r;
+}
+function speakText(text, speakerOn, onDone) {
+  if (!canSpeakOut || !speakerOn) { onDone && setTimeout(onDone, Math.min(3500, 500 + text.length * 35)); return null; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = S.profile.accent; u.rate = S.profile.rate; u.pitch = 1;
+  const voices = speechSynthesis.getVoices();
+  const en = voices.find(v => v.lang === S.profile.accent) || voices.find(v => /^en/i.test(v.lang));
+  if (en) u.voice = en;
+  u.onend = () => onDone && onDone();
+  u.onerror = () => onDone && onDone();
+  speechSynthesis.speak(u);
+  return u;
+}
+
+
+let topicKey = 'daily', promptIdx = 0;
+function renderTopicChips() {
+  const el = $('topic-chips'); if (!el) return;
+  el.innerHTML = Object.keys(TOPICS).map(k => `
+    <button onclick="pickTopic('${k}')" class="px-3.5 py-2 rounded-full text-xs font-bold border transition-all ${k === topicKey ? 'bg-white text-indigo-700 border-white' : 'bg-white/5 text-indigo-100 border-white/15 hover:bg-white/10'}">${TOPICS[k].label}</button>`).join('');
+}
+function pickTopic(k) { topicKey = k; promptIdx = 0; renderTopicChips(); }
+function summaryStats(s) {
+  const box = (label, val) => `<div class="rounded-xl py-3 bg-white/10"><p class="text-lg font-extrabold">${val}</p><p class="text-[10px] text-indigo-200 font-semibold">${label}</p></div>`;
+  return `<div class="grid grid-cols-4 gap-2">${box('Time', fmt(s.elapsed))}${box('Turns', s.turns)}${box('Words', s.words)}${box('New words', s.unique.size)}</div>`;
+}
+function tipsBox(tips) {
+  return `<div class="text-left rounded-2xl p-4 bg-white/5 border border-white/10">
+    <p class="text-[10px] font-bold uppercase tracking-wider text-amber-300 mb-2">Your corrections</p>
+    ${tips.length ? '<ul class="space-y-2 text-xs text-slate-100">' + tips.slice(0, 4).map(t => '<li>• ' + esc(t) + '</li>').join('') + '</ul>'
+                  : '<p class="text-xs text-slate-300">No mistakes flagged. Great job!</p>'}
+  </div>`;
+}
+function starsBlock(key) {
+  return `<div><p class="text-xs font-bold text-indigo-100 mb-2">How was the conversation?</p>
+    <div class="stars flex justify-center gap-1" id="${key}-stars">${[1,2,3,4,5].map(n => `<button onclick="rate('${key}', ${n})" aria-label="${n} stars">★</button>`).join('')}</div></div>`;
+}
+function rate(key, n) {
+  if (key === 'peer' && peer) peer.rating = n;
+  if (key === 'ai' && aiCall) aiCall.rating = n;
+  paintStars(key, n);
+}
+function paintStars(key, n) {
+  const box = $(key + '-stars'); if (!box) return;
+  [...box.querySelectorAll('button')].forEach((b, i) => b.classList.toggle('on', i < n));
+}
+
+/* =====================================================================
+   1-ON-1 REAL CALL — real humans only (WebRTC + WebSocket signaling)
+   No AI replies. Both users must be online and press Start.
+   ===================================================================== */
+/* ICE: public STUN. For users behind strict NAT/firewall, add a TURN server here
+   (e.g. free Twilio trial, Metered.ca, or self-hosted coturn). Example:
+   { urls: 'turn:turn.example.com:3478', username: 'u', credential: 'p' }
+*/
+const ICE_SERVERS = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' }
+  ]
+};
+let peer = null, peerTimer = null;
+let peerWs = null, peerPc = null, peerLocalStream = null, peerRoomId = null, peerRole = null;
+let peerMuted = false, peerSpeakerOn = true;
+let peerSearching = false;
+let peerWsRetry = 0;
+let peerConnectTimeout = null;
+let peerAudioConnected = false;
+const PEER_WS_MAX_RETRY = 4;
+const PEER_CONNECT_MS = 25000;
+
+function showCallView(id) {
+  ['v-lobby', 'v-search', 'v-live', 'v-summary-peer'].forEach(v => $(v).classList.toggle('on', v === id));
+}
+
+function setSearchStatus(text) {
+  const st = $('search-status');
+  if (st) st.textContent = text;
+}
+
+function setLiveMicState(text) {
+  const st = $('live-mic-state');
+  if (st) st.textContent = text;
+}
+
+function peerWsUrl() {
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  return proto + '//' + location.host + '/ws';
+}
+
+function peerSend(obj) {
+  if (peerWs && peerWs.readyState === 1) {
+    try { peerWs.send(JSON.stringify(obj)); } catch (e) {}
+  }
+}
+
+function ensurePeerWs() {
+  return new Promise((resolve, reject) => {
+    if (peerWs && peerWs.readyState === 1) return resolve(peerWs);
+    if (!navigator.onLine) return reject(new Error('offline'));
+    try {
+      peerWs = new WebSocket(peerWsUrl());
+    } catch (e) {
+      return reject(e);
+    }
+    const t = setTimeout(() => {
+      try { peerWs.close(); } catch (e) {}
+      reject(new Error('timeout'));
+    }, 10000);
+    peerWs.onopen = () => {
+      clearTimeout(t);
+      peerWsRetry = 0;
+      const name = (S.profile && S.profile.name) || 'Learner';
+      const init = initials(name);
+      peerSend({ type: 'hello', name, init, level: (S.profile && S.profile.level) || 'B2' });
+      resolve(peerWs);
+    };
+    peerWs.onerror = () => { clearTimeout(t); reject(new Error('ws error')); };
+    peerWs.onclose = () => {
+      peerWs = null;
+      if (peerSearching && !peer) {
+        setSearchStatus('Connection lost. Retrying…');
+        schedulePeerWsRetry();
+      } else if (peer && !peer.ended) {
+        setLiveMicState('Signaling disconnected…');
+      }
+    };
+    peerWs.onmessage = (ev) => {
+      let msg; try { msg = JSON.parse(ev.data); } catch { return; }
+      handlePeerSignal(msg);
+    };
+  });
+}
+
+function schedulePeerWsRetry() {
+  if (!peerSearching || peerWsRetry >= PEER_WS_MAX_RETRY) {
+    if (peerSearching) {
+      peerSearching = false;
+      setSearchStatus('Could not reach matchmaking. Check your connection.');
+      toast('Matchmaking unavailable. Try again.');
+      setTimeout(() => { if (!peer) showCallView('v-lobby'); }, 2500);
+    }
+    return;
+  }
+  const delay = Math.min(8000, 800 * Math.pow(2, peerWsRetry));
+  peerWsRetry++;
+  setTimeout(async () => {
+    if (!peerSearching || peer) return;
+    try {
+      await ensurePeerWs();
+      setSearchStatus('Waiting for another person online…');
+      peerSend({ type: 'find', topic: topicKey || 'free' });
+    } catch (e) {
+      schedulePeerWsRetry();
+    }
+  }, delay);
+}
+
+async function startSearch() {
+  if (peer) return;
+  if (busy()) { toast('Finish the current call first'); return; }
+  if (!navigator.onLine) {
+    toast('You are offline. Live calls need internet.');
+    showNetBanner(true, 'You are offline. Live voice calls need internet.');
+    return;
+  }
+  peerSearching = true;
+  peerWsRetry = 0;
+  peerAudioConnected = false;
+  showCallView('v-search');
+  setSearchStatus('Connecting to matchmaking…');
+  try {
+    await ensurePeerWs();
+    setSearchStatus('Searching for a partner…');
+    peerSend({ type: 'find', topic: topicKey || 'free' });
+  } catch (e) {
+    if (e.message === 'offline') {
+      peerSearching = false;
+      showCallView('v-lobby');
+      toast('You are offline.');
+      return;
+    }
+    setSearchStatus('Cannot reach server. Retrying…');
+    schedulePeerWsRetry();
+  }
+}
+
+function cancelSearch() {
+  peerSearching = false;
+  peerWsRetry = PEER_WS_MAX_RETRY;
+  peerSend({ type: 'cancel-find' });
+  showCallView('v-lobby');
+}
+
+function handlePeerSignal(msg) {
+  switch (msg.type) {
+    case 'searching':
+      setSearchStatus('Searching… (queue ' + (msg.queue || 1) + ')');
+      break;
+    case 'cancelled':
+      peerSearching = false;
+      showCallView('v-lobby');
+      break;
+    case 'search-timeout':
+      peerSearching = false;
+      setSearchStatus('Search timed out. Try again.');
+      toast('No partner found. Try again later.');
+      setTimeout(() => { if (!peer) showCallView('v-lobby'); }, 2000);
+      break;
+    case 'matched':
+      peerSearching = false;
+      onMatched(msg);
+      break;
+    case 'signal':
+      onRtcSignal(msg.data);
+      break;
+    case 'chat':
+      if (peer) {
+        peerBubble('them', msg.text);
+        peer.turns++;
+      }
+      break;
+    case 'peer-left':
+      if (peer && !peer.ended) {
+        toast(msg.reason === 'disconnected' ? 'Partner disconnected' : 'Partner left the call');
+        endPeer(false);
+      }
+      break;
+    case 'error':
+      if (msg.code === 'already-in-call') toast('Already in a call');
+      break;
+    case 'pong':
+      break;
+  }
+}
+
+async function onMatched(msg) {
+  peerRoomId = msg.roomId;
+  peerRole = msg.role;
+  const p = msg.peer || { name: 'Partner', init: 'P', level: 'B2' };
+  peer = {
+    p: { name: p.name, init: p.init || 'P', country: 'Online', level: p.level || 'B2', grad: 'from-violet-500 to-fuchsia-600' },
+    startedAt: Date.now(), elapsed: 0, turns: 0, words: 0, unique: new Set(), tips: [], rating: 0, field: null, ended: false
+  };
+  peerAudioConnected = false;
+  $('live-partner-av').textContent = peer.p.init;
+  $('live-partner-av').className = 'ring live w-14 h-14 rounded-full bg-gradient-to-br ' + peer.p.grad + ' font-extrabold flex items-center justify-center text-sm ring-4 ring-white/10';
+  $('live-partner-name').textContent = peer.p.name;
+  $('peer-log').innerHTML = '';
+  $('peer-tip').classList.add('hidden');
+  $('peer-input').value = '';
+  promptIdx = 0; showPrompt();
+  showCallView('v-live');
+  startClock('live-timer', () => peer && peer.startedAt);
+  peerBubble('them', 'Partner found! Connecting voice…');
+  toast('Partner found: ' + peer.p.name);
+  setLiveMicState('Connecting voice…');
+  peerSetMicUI();
+  clearTimeout(peerConnectTimeout);
+  peerConnectTimeout = setTimeout(() => {
+    if (peer && !peerAudioConnected && !peer.ended) {
+      setLiveMicState('Call Failed — connection timed out');
+      toast('Voice connection failed. Try again.');
+      peerBubble('them', 'Voice connection timed out. You can end the call and retry.');
+    }
+  }, PEER_CONNECT_MS);
+  try {
+    await startWebRtc();
+  } catch (e) {
+    console.error(e);
+    const denied = e && (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError');
+    setLiveMicState(denied ? 'Mic permission denied' : 'Voice setup failed');
+    toast(denied ? 'Microphone permission is required for voice calls' : 'Could not start microphone');
+    peerBubble('them', denied
+      ? 'Microphone access was denied. Allow the mic in your browser and start a new call.'
+      : 'Could not access the microphone. Check device settings and try again.');
+  }
+}
+
+async function startWebRtc() {
+  peerLocalStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+  peerPc = new RTCPeerConnection(ICE_SERVERS);
+  peerLocalStream.getTracks().forEach(t => peerPc.addTrack(t, peerLocalStream));
+  peerPc.ontrack = (ev) => {
+    const audio = $('remote-audio');
+    if (audio) {
+      audio.srcObject = ev.streams[0];
+      audio.muted = !peerSpeakerOn;
+      audio.play().catch(() => {});
+    }
+  };
+  peerPc.onicecandidate = (ev) => {
+    if (ev.candidate) peerSend({ type: 'signal', roomId: peerRoomId, data: { candidate: ev.candidate } });
+  };
+  peerPc.onconnectionstatechange = () => {
+    if (!peerPc || !peer || peer.ended) return;
+    const state = peerPc.connectionState;
+    if (state === 'connected') {
+      peerAudioConnected = true;
+      clearTimeout(peerConnectTimeout);
+      setLiveMicState(peerMuted ? 'Mic muted' : 'Live voice on');
+      if (peer && peer.turns === 0) {
+        peerBubble('them', 'Voice connected! You are speaking with a real person. Say hello.');
+      }
+    } else if (state === 'connecting' || state === 'checking') {
+      setLiveMicState('Connecting voice…');
+    } else if (state === 'disconnected') {
+      setLiveMicState('Reconnecting…');
+    } else if (state === 'failed') {
+      setLiveMicState('Call Failed');
+      toast('Voice connection failed');
+    } else if (state === 'closed') {
+      setLiveMicState('Call ended');
+    }
+  };
+  peerPc.oniceconnectionstatechange = () => {
+    if (!peerPc) return;
+    if (peerPc.iceConnectionState === 'failed') {
+      try { peerPc.restartIce(); } catch (e) {}
+    }
+  };
+  if (peerRole === 'offerer') {
+    const offer = await peerPc.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: false });
+    await peerPc.setLocalDescription(offer);
+    peerSend({ type: 'signal', roomId: peerRoomId, data: { sdp: peerPc.localDescription } });
+  }
+}
+
+async function onRtcSignal(data) {
+  if (!data) return;
+  // Wait briefly if PC not ready yet (answerer race)
+  if (!peerPc) {
+    await new Promise(r => setTimeout(r, 200));
+    if (!peerPc) return;
+  }
+  try {
+    if (data.sdp) {
+      const desc = data.sdp;
+      if (desc.type === 'offer' && peerPc.signalingState !== 'stable' && peerPc.signalingState !== 'have-remote-offer') {
+        // ignore out-of-order
+      }
+      await peerPc.setRemoteDescription(desc);
+      if (desc.type === 'offer') {
+        const answer = await peerPc.createAnswer();
+        await peerPc.setLocalDescription(answer);
+        peerSend({ type: 'signal', roomId: peerRoomId, data: { sdp: peerPc.localDescription } });
+      }
+    } else if (data.candidate) {
+      try {
+        await peerPc.addIceCandidate(data.candidate);
+      } catch (e) {
+        // candidate may arrive before remote description
+      }
+    }
+  } catch (e) { console.warn('RTC signal', e); }
+}
+
+function startClock(elId, getStart) {
+  clearInterval(peerTimer);
+  peerTimer = setInterval(() => {
+    const st = getStart(); if (!st) return;
+    $(elId).textContent = fmt(Math.round((Date.now() - st) / 1000));
+  }, 1000);
+}
+function showPrompt() { const list = TOPICS[topicKey].prompts; $('live-prompt').textContent = list[promptIdx % list.length]; }
+function nextPrompt() { promptIdx++; showPrompt(); }
+function peerBubble(who, text) {
+  const log = $('peer-log');
+  if (!log) return;
+  const mine = who === 'me';
+  const d = document.createElement('div');
+  d.className = 'flex ' + (mine ? 'justify-end' : 'justify-start') + ' pop';
+  d.innerHTML = '<div class="max-w-[85%] px-3.5 py-2 text-sm ' + (mine ? 'bubble-me' : 'bubble-them') + '">' + esc(text) + '</div>';
+  log.appendChild(d); log.scrollTop = log.scrollHeight;
+}
+function peerTyped() {
+  const input = $('peer-input'), text = input.value.trim();
+  if (!text || !peer) return;
+  input.value = '';
+  peer.turns++; peer.words += wordCount(text);
+  peerBubble('me', text);
+  peerSend({ type: 'chat', roomId: peerRoomId, text });
+  const a = analyse(text);
+  a.hits.forEach(h => { if (!peer.tips.includes(h.note)) peer.tips.push(h.note); });
+  if (a.hits.length && S.profile.mode === 'relaxed') peerTip(a.hits[0].note);
+}
+function peerTip(note) {
+  const el = $('peer-tip');
+  el.innerHTML = '<b>Tip:</b> ' + esc(note);
+  el.classList.remove('hidden');
+  clearTimeout(peerTip._t); peerTip._t = setTimeout(() => el.classList.add('hidden'), 6000);
+}
+function peerToggleMic() {
+  if (!peer || !peerLocalStream) {
+    toast('Voice not ready yet — wait for connection');
+    return;
+  }
+  peerMuted = !peerMuted;
+  peerLocalStream.getAudioTracks().forEach(t => { t.enabled = !peerMuted; });
+  peerSetMicUI();
+}
+function peerSetMicUI() {
+  const b = $('peer-mic');
+  if (!b) return;
+  const live = peerLocalStream && !peerMuted && peerAudioConnected;
+  b.className = 'ctrl ' + (live ? 'on' : peerMuted ? 'off' : '');
+  b.innerHTML = '<i data-lucide="' + (live ? 'mic' : 'mic-off') + '" class="w-5 h-5"></i>';
+  if (!peerAudioConnected && peerLocalStream) setLiveMicState('Connecting voice…');
+  else if (!peerLocalStream) setLiveMicState('Connecting voice…');
+  else setLiveMicState(peerMuted ? 'Mic muted' : 'Live voice on');
+  icons();
+}
+function peerToggleSpeaker() {
+  peerSpeakerOn = !peerSpeakerOn;
+  const audio = $('remote-audio');
+  if (audio) audio.muted = !peerSpeakerOn;
+  const b = $('peer-spk');
+  if (b) {
+    b.className = 'ctrl ' + (peerSpeakerOn ? 'on' : '');
+    b.innerHTML = '<i data-lucide="' + (peerSpeakerOn ? 'volume-2' : 'volume-x') + '" class="w-5 h-5"></i>';
+  }
+  icons();
+}
+function cleanupRtc() {
+  clearTimeout(peerConnectTimeout);
+  peerConnectTimeout = null;
+  try { if (peerPc) peerPc.close(); } catch (e) {}
+  peerPc = null;
+  if (peerLocalStream) {
+    peerLocalStream.getTracks().forEach(t => t.stop());
+    peerLocalStream = null;
+  }
+  const audio = $('remote-audio');
+  if (audio) { audio.srcObject = null; }
+  peerRoomId = null; peerRole = null; peerMuted = false; peerAudioConnected = false;
+}
+function endPeer(silent) {
+  if (!peer) return;
+  peer.ended = true;
+  peerSearching = false;
+  peerSend({ type: 'leave', roomId: peerRoomId });
+  clearInterval(peerTimer);
+  cleanupRtc();
+  peer.elapsed = Math.round((Date.now() - peer.startedAt) / 1000);
+  if (silent) { peer = null; return; }
+  renderPeerSummary();
+  showCallView('v-summary-peer');
+}
+function renderPeerSummary() {
+  const s = peer, xp = Math.min(50, Math.max(5, s.turns * 5 + Math.floor(s.elapsed / 30)));
+  $('v-summary-peer').innerHTML = `
+    <div class="pop text-center space-y-4 my-auto">
+      <div class="text-4xl">${s.elapsed >= 60 ? '🎉' : s.elapsed > 0 ? '👍' : '📞'}</div>
+      <div>
+        <h3 class="text-lg font-extrabold">Call ended</h3>
+        <p class="text-xs text-indigo-200/80">with ${esc(s.p.name)} · real person</p>
+      </div>
+      ${summaryStats(s)}
+      ${tipsBox(s.tips)}
+      ${starsBlock('peer')}
+      <p class="text-xs font-bold text-emerald-300">+${xp} XP when you save</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button onclick="savePeer(true)" class="px-6 py-3 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-500">Save & Go Home</button>
+        <button onclick="savePeer(false)" class="px-6 py-3 rounded-xl font-bold text-sm border border-white/20 hover:bg-white/10">Call again</button>
+      </div>
+    </div>`;
+  paintStars('peer', s.rating);
+  icons();
+}
+function savePeer(goHome) {
+  const s = peer;
+  if (!s) return;
+  const xp = Math.min(50, Math.max(5, s.turns * 5 + Math.floor(s.elapsed / 30)));
+  S.xp += xp; S.homeXP += xp;
+  S.history.unshift({ mode: 'peer', name: s.p.name, topic: TOPICS[topicKey]?.label || 'Talk', elapsed: s.elapsed, turns: s.turns, xp, at: Date.now() });
+  if (S.history.length > 30) S.history.length = 30;
+  saveState();
+  peer = null;
+  showCallView('v-lobby');
+  if (goHome) go('home');
+  else startSearch();
+  renderHome();
+  toast('+' + xp + ' XP saved');
+}
+
+/* =====================================================================
+   AI VOICE CALL - real-time loop: speak -> listen -> think -> speak
+   ===================================================================== */
+const FIRST = ['Aarav','Vivaan','Aditya','Arjun','Sai','Ishaan','Liam','Noah','Oliver','James','Lucas','Henry','Aanya','Diya','Saanvi','Olivia','Emma','Sophia','Ava','Mia','Evelyn','Harper','Myra','Ananya'];
+const LAST = ['Sharma','Verma','Gupta','Patel','Reddy','Iyer','Smith','Johnson','Brown','Miller','Garcia','Wilson','Taylor','Moore','Lee','Thomas'];
+const FIELDS = ['Actors & Actresses', 'Medical & Doctors', 'Engineering & Tech', 'Education & Faculty', 'Business & Science'];
+const BASE = [
+  ['Salman Khan', 0, 'Bollywood superstar & fitness icon', 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Salman_Khan_2_%28cropped%29.jpg'],
+  ['Shah Rukh Khan', 0, 'King of Bollywood & romantic dialogues', 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Shah_Rukh_Khan2023.jpg'],
+  ['Tom Cruise', 0, 'Hollywood action star & stunt expert', 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Tom_Cruise_at_Cannes_Film_Festival_2025_01.jpg'],
+  ['Emma Watson', 0, 'Actress & UN Goodwill Ambassador', 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Emma_Watson_2013.jpg'],
+  ['Leonardo DiCaprio', 0, 'Oscar-winning actor & environmentalist', 'https://upload.wikimedia.org/wikipedia/commons/4/46/Leonardo_DiCaprio_2014.jpg'],
+  ['Deepika Padukone', 0, 'Global Bollywood star & advocate', 'https://upload.wikimedia.org/wikipedia/commons/b/b7/Deepika_Padukone_at_Cannes_2018.jpg'],
+  ['Robert Downey Jr.', 0, 'Iron Man actor & tech investor', 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg'],
+  ['Priyanka Chopra', 0, 'Global icon, actress & producer', 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Priyanka_Chopra_Jonas_in_2021.jpg'],
+  ['Scarlett Johansson', 0, 'Hollywood blockbuster superstar', 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Scarlett_Johansson_by_Gage_Skidmore_2_%28cropped%29.jpg'],
+  ['Brad Pitt', 0, 'Award-winning actor and producer', 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Brad_Pitt_2019_by_Glenn_Francis.jpg'],
+  ['Dr. House', 1, 'Chief of Diagnostic Medicine'], ['Dr. Sarah Miller', 1, 'Pediatric Surgeon & Consultant'],
+  ['Dr. Robert Chen', 1, 'Cardiologist & Heart Specialist'], ['Alex Mercer', 2, 'Senior Full-Stack Cloud Architect'],
+  ['Elena Rostova', 2, 'AI & Machine Learning Scientist'], ['Prof. John Keating', 3, 'Inspirational Literature Professor'],
+  ['Clara Oswald', 3, 'English Grammar & Pronunciation Tutor']
+];
+const GRADS = ['from-rose-500 to-orange-400','from-violet-500 to-indigo-500','from-emerald-500 to-teal-500','from-sky-500 to-blue-600','from-amber-500 to-red-500','from-fuchsia-500 to-pink-500','from-cyan-500 to-blue-500','from-lime-500 to-emerald-600'];
+const CHARS = BASE.map(([name, f, sub, img], i) => ({ name, field: FIELDS[f], sub, grad: GRADS[i % GRADS.length], img: img || null }));
+for (let i = 0; CHARS.length < 1050; i++) {
+  const field = FIELDS[i % FIELDS.length];
+  CHARS.push({
+    name: `${FIRST[i % FIRST.length]} ${LAST[(i * 7) % LAST.length]} #${i + 17}`,
+    field, sub: `Expert professional in ${field.toLowerCase()}`, grad: GRADS[i % GRADS.length], img: null
+  });
+}
+CHARS.forEach(c => { c.init = c.name.split(' ').filter(w => /[A-Za-z]/.test(w)).slice(0, 2).map(w => w[0]).join('').toUpperCase(); });
+
+const TABS = ['All', ...FIELDS];
+let activeTab = 'All', visibleCount = 30, pickedChar = CHARS[0];
+let aiCall = null; // live AI session
+let aiRec = null;
+let aiTipTimer = null;
+
+function renderAiSupport() {
+  const el = $('ai-voice-support');
+  if (SpeechRec && canSpeakOut) el.textContent = 'Voice ready: your browser supports live speech input and output.';
+  else el.textContent = 'Voice limited: your browser lacks full speech support. You can type replies instead (Chrome or Edge recommended).';
+}
+function renderCharTabs() {
+  $('char-tabs').innerHTML = TABS.map(t => `
+    <button onclick="setTab('${t}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border ${t === activeTab ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-300'}">${t}</button>`).join('');
+}
+function setTab(t) { activeTab = t; visibleCount = 30; renderCharGrid(false); }
+function renderCharGrid(reset) {
+  if (reset) visibleCount = 30;
+  renderCharTabs();
+  const q = ($('char-search').value || '').trim().toLowerCase();
+  const list = CHARS.filter(c => (activeTab === 'All' || c.field === activeTab) && (!q || c.name.toLowerCase().includes(q) || c.field.toLowerCase().includes(q)));
+  $('char-count').textContent = `(${list.length.toLocaleString()} available)`;
+  $('char-grid').innerHTML = list.slice(0, visibleCount).map(c => `
+    <button onclick="startAiCall(${CHARS.indexOf(c)})" class="bg-white rounded-2xl border-2 border-slate-200/80 p-3 text-center transition-all hover:shadow-md hover:border-emerald-400 group">
+      <div class="mx-auto mb-2 w-14 h-14 rounded-full overflow-hidden shadow-md group-hover:scale-105 transition-transform ${c.img ? '' : 'bg-gradient-to-br ' + c.grad + ' text-white font-extrabold flex items-center justify-center text-sm'}">
+        ${c.img ? `<img src="${c.img}" alt="${esc(c.name)}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('bg-gradient-to-br','${c.grad}','text-white','font-extrabold','flex','items-center','justify-center','text-sm');this.parentElement.textContent='${c.init}'">` : c.init}
+      </div>
+      <p class="text-[11px] font-bold truncate">${esc(c.name)}</p>
+      <p class="text-[9px] text-slate-400 truncate">${esc(c.field)}</p>
+    </button>`).join('') || '<p class="col-span-full text-center text-xs text-slate-400 py-6">No characters match your search.</p>';
+  $('char-more').classList.toggle('hidden', list.length <= visibleCount);
+}
+function moreChars() { visibleCount += 30; renderCharGrid(false); }
+
+function setAiState(kind, label) {
+  const colors = { connecting: 'bg-slate-400', speaking: 'bg-indigo-400', listening: 'bg-emerald-400', thinking: 'bg-amber-400', paused: 'bg-slate-500', ended: 'bg-slate-500' };
+  $('ai-state-dot').className = 'w-1.5 h-1.5 rounded-full ' + (colors[kind] || 'bg-slate-400') + (kind === 'listening' || kind === 'thinking' ? ' blink' : '');
+  $('ai-state-text').textContent = label;
+  const av = $('ai-avatar');
+  av.classList.toggle('ring-indigo-400', kind === 'speaking');
+  av.classList.toggle('speak', kind === 'speaking');
+  $('ai-wave').className = 'wave ' + (kind === 'speaking' ? 'live' : kind === 'listening' ? 'live mine' : kind === 'thinking' ? 'live paused' : 'paused');
+  $('ai-hint').textContent = kind === 'speaking' ? 'Tap the character to interrupt and speak' : kind === 'listening' ? 'Listening… speak naturally' : kind === 'thinking' ? 'Thinking…' : 'Tap the mic to talk';
+  $('ai-mute').className = 'ctrl ' + (aiCall && aiCall.muted ? 'off' : 'on');
+  $('ai-mute').innerHTML = `<i data-lucide="${aiCall && aiCall.muted ? 'mic-off' : 'mic'}" class="w-5 h-5"></i>`;
+  $('ai-spk').className = 'ctrl ' + (aiCall && aiCall.speakerOn ? 'on' : 'off');
+  $('ai-spk').innerHTML = `<i data-lucide="${aiCall && aiCall.speakerOn ? 'volume-2' : 'volume-x'}" class="w-5 h-5"></i>`;
+  icons();
+}
+function startAiCall(idx) {
+  if (busy()) { toast('Finish the current call first'); return; }
+  pickedChar = CHARS[idx];
+  const c = pickedChar;
+  aiCall = {
+    c, startedAt: Date.now(), elapsed: 0, turns: 0, words: 0, unique: new Set(), tips: [], rating: 0,
+    muted: false, speakerOn: true, state: 'connecting', token: 0, history: [], ended: false, rec: null, got: false
+  };
+  if (c.img) {
+    $('ai-avatar').className = `relative w-24 h-24 rounded-full overflow-hidden shadow-2xl ring-4 ring-white/10`;
+    $('ai-avatar').innerHTML = `<img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover" onerror="this.remove();this.parentElement.className='relative w-24 h-24 rounded-full font-extrabold text-2xl text-white flex items-center justify-center shadow-2xl ring-4 ring-white/10 bg-gradient-to-br ${c.grad}';this.parentElement.innerHTML='<span id=ai-init>${c.init}</span>'">`;
+  } else {
+    $('ai-avatar').className = `relative w-24 h-24 rounded-full font-extrabold text-2xl text-white flex items-center justify-center shadow-2xl ring-4 ring-white/10 bg-gradient-to-br ${c.grad}`;
+    $('ai-avatar').innerHTML = `<span id="ai-init">${c.init}</span>`;
+  }
+  $('ai-name').textContent = c.name;
+  $('ai-field').textContent = c.field;
+  $('ai-you-text').textContent = '—';
+  $('ai-tip').classList.add('hidden');
+  $('ai-cap-label').textContent = c.name;
+  $('ai-cap-text').textContent = 'Connecting…';
+  $('ai-timer').textContent = '00:00';
+  $('ai-fallback').classList.toggle('hidden', !!(SpeechRec && canSpeakOut));
+  $('ai-screen').classList.remove('hidden');
+  document.body.classList.add('call-mode');
+  $('ai-summary').classList.remove('on');
+  $('ai-live').classList.add('on');
+  startClock('ai-timer', () => aiCall && aiCall.startedAt);
+  icons();
+  setTimeout(() => {
+    if (!aiCall) return;
+    const opener = `Hi, I am ${c.name}. ${OPENERS[c.field] || 'What would you like to talk about today?'}`;
+    aiSay(opener);
+  }, 700);
+}
+
+/* The AI speaks, then automatically opens the mic for your turn */
+function aiSay(text) {
+  if (!aiCall) return;
+  const token = ++aiCall.token;
+  aiCall.history.push({ role: 'assistant', content: text });
+  $('ai-cap-label').textContent = aiCall.c.name;
+  $('ai-cap-text').textContent = text;
+  $('ai-cap-text').parentElement.classList.remove('caption-in'); void $('ai-cap-text').offsetWidth; $('ai-cap-text').parentElement.classList.add('caption-in');
+  setAiState('speaking', 'Speaking');
+  const done = () => { if (aiCall && aiCall.token === token) { if (S.profile.autoListen) aiListen(); else setAiState('paused', 'Tap the mic to talk'); } };
+  speakText(text, aiCall.speakerOn, done);
+}
+
+function aiListen() {
+  if (!aiCall || aiCall.ended) return;
+  if (aiCall.muted) { setAiState('paused', 'Mic muted'); return; }
+  if (!SpeechRec) { setAiState('listening', 'Your turn (type below)'); $('ai-input').focus(); return; }
+  const token = aiCall.token;
+  const r = makeRecognizer();
+  aiCall.rec = r;
+  aiCall.got = false;
+  let interim = '';
+  r.onresult = e => {
+    let finalText = '';
+    interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const tr = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalText += tr; else interim += tr;
+    }
+    if (interim) $('ai-you-text').textContent = interim + '…';
+    if (finalText.trim() && aiCall && aiCall.token === token) {
+      aiCall.got = true;
+      aiUserTurn(finalText.trim());
+    }
+  };
+  r.onend = () => {
+    // Browser stopped listening without a result (silence): listen again
+    if (aiCall && aiCall.rec === r && !aiCall.got && aiCall.token === token && !aiCall.muted && aiCall.state === 'listening') {
+      setTimeout(() => { if (aiCall && aiCall.token === token) aiListen(); }, 250);
+    }
+  };
+  r.onerror = e => {
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      toast('Microphone blocked. Allow mic access, then tap the mic.');
+      aiCall.muted = true; setAiState('paused', 'Mic blocked');
+    }
+  };
+  try {
+    r.start();
+    setAiState('listening', 'Listening');
+    $('ai-you-text').textContent = '…';
+  } catch (e) { setAiState('paused', 'Tap the mic to talk'); }
+}
+
+function aiUserTurn(text) {
+  if (!aiCall) return;
+  stopRec();
+  const a = analyse(text);
+  aiCall.turns++; aiCall.words += a.words;
+  a.cleaned.forEach(w => aiCall.unique.add(w));
+  aiCall.history.push({ role: 'user', content: text });
+  $('ai-you-text').textContent = text;
+  a.hits.forEach(h => { if (!aiCall.tips.includes(h.note)) aiCall.tips.push(h.note); });
+  if (a.hits.length && S.profile.mode === 'relaxed') {
+    const el = $('ai-tip');
+    el.innerHTML = '<b>Tip:</b> ' + esc(a.hits[0].note);
+    el.classList.remove('hidden');
+    clearTimeout(aiTipTimer); aiTipTimer = setTimeout(() => el.classList.add('hidden'), 6000);
+  }
+  setAiState('thinking', 'Thinking');
+  const token = aiCall.token;
+  getAiReply(text).then(reply => {
+    if (!aiCall || aiCall.token !== token) return;
+    aiSay(reply);
+  });
+}
+
+/* Optional live AI brain via your server. Falls back to the built-in engine. */
+async function getAiReply(text) {
+  const c = aiCall.c;
+  const turn = aiCall.turns;
+  if (AI_ENDPOINT) {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), AI_TIMEOUT_MS);
+      const res = await fetch(AI_ENDPOINT, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: ctrl.signal,
+        body: JSON.stringify({
+          character: { name: c.name, field: c.field, sub: c.sub },
+          messages: aiCall.history.slice(-12),
+          level: S.profile.level || 'B2'
+        })
+      });
+      clearTimeout(timer);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.reply) return String(data.reply).trim();
+      }
+    } catch (e) { /* fall through to built-in engine */ }
+  }
+  await new Promise(r => setTimeout(r, 400 + Math.random() * 350));
+  return localReply(text, c.field, turn, c.name);
+}
+
+function stopRec() {
+  if (aiCall && aiCall.rec) { const r = aiCall.rec; aiCall.rec = null; try { r.onend = null; r.stop(); } catch (e) {} }
+}
+function aiInterrupt() {
+  if (!aiCall || aiCall.state === 'ended') return;
+  if (aiCall.state !== 'speaking') return;
+  aiCall.token++;
+  if (canSpeakOut) speechSynthesis.cancel();
+  aiListen();
+}
+function aiToggleMute() {
+  if (!aiCall) return;
+  if (aiCall.state === 'listening') { aiCall.muted = true; stopRec(); setAiState('paused', 'Mic muted'); }
+  else { aiCall.muted = false; if (aiCall.state !== 'speaking' && aiCall.state !== 'thinking') aiListen(); }
+}
+function aiToggleSpeaker() {
+  if (!aiCall) return;
+  aiCall.speakerOn = !aiCall.speakerOn;
+  if (!aiCall.speakerOn && canSpeakOut) speechSynthesis.cancel();
+  setAiState(aiCall.state, $('ai-state-text').textContent);
+}
+function aiTyped() {
+  const input = $('ai-input'), text = input.value.trim();
+  if (!text || !aiCall) return;
+  input.value = '';
+  aiUserTurn(text);
+}
+function aiEnd(silent) {
+  if (!aiCall) return;
+  aiCall.ended = true;
+  aiCall.token++;
+  stopRec();
+  if (canSpeakOut) speechSynthesis.cancel();
+  clearInterval(peerTimer);
+  aiCall.elapsed = Math.round((Date.now() - aiCall.startedAt) / 1000);
+  if (silent) { aiCall = null; $('ai-screen').classList.add('hidden'); document.body.classList.remove('call-mode'); return; }
+  renderAiSummary();
+  $('ai-live').classList.remove('on');
+  $('ai-summary').classList.add('on');
+  icons();
+}
+function renderAiSummary() {
+  const s = aiCall, xp = Math.min(50, s.turns * 5);
+  $('ai-summary').innerHTML = `
+    <div class="pop text-center space-y-4 my-auto">
+      <div class="text-4xl">${s.turns >= 5 ? '🎉' : s.turns > 0 ? '👍' : '📞'}</div>
+      <div>
+        <h3 class="text-lg font-extrabold">Call ended</h3>
+        <p class="text-xs text-indigo-200/80">with ${esc(s.c.name)} · ${esc(s.c.field)}</p>
+      </div>
+      ${summaryStats(s)}
+      ${tipsBox(s.tips)}
+      ${starsBlock('ai')}
+      <p class="text-xs font-bold text-emerald-300">+${xp} XP when you save</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button onclick="saveAi(true)" class="px-6 py-3 rounded-xl font-bold text-sm bg-emerald-600 hover:bg-emerald-500">Save & Go Home</button>
+        <button onclick="saveAi(false)" class="px-6 py-3 rounded-xl font-bold text-sm border border-white/20 hover:bg-white/10">Call again</button>
+      </div>
+    </div>`;
+  paintStars('ai', s.rating);
+}
+function saveAi(goHome) {
+  const s = aiCall;
+  const xp = recordSession({ mode: 'ai', title: s.c.name, duration: s.elapsed, turns: s.turns, words: s.words, unique: s.unique.size, rating: s.rating });
+  toast(`Saved · +${xp} XP`);
+  const c = CHARS.indexOf(s.c);
+  aiCall = null;
+  $('ai-screen').classList.add('hidden');
+  document.body.classList.remove('call-mode');
+  if (goHome) go('home'); else startAiCall(c);
+}
+window.addEventListener('beforeunload', e => { if (busy()) { e.preventDefault(); e.returnValue = ''; } });
+
+/* =====================================================================
+   GAMES
+   ===================================================================== */
+const ACC = {
+  violet:  { bar:'bg-violet-500', btn:'bg-violet-600 hover:bg-violet-700', soft:'bg-violet-100 text-violet-600', text:'text-violet-600', hover:'hover:border-violet-300', ring:'focus:border-violet-400', dash:'border-violet-200' },
+  indigo:  { bar:'bg-indigo-500', btn:'bg-indigo-600 hover:bg-indigo-700', soft:'bg-indigo-100 text-indigo-600', text:'text-indigo-600', hover:'hover:border-indigo-300', ring:'focus:border-indigo-400', dash:'border-indigo-200' },
+  emerald: { bar:'bg-emerald-500', btn:'bg-emerald-600 hover:bg-emerald-700', soft:'bg-emerald-100 text-emerald-600', text:'text-emerald-600', hover:'hover:border-emerald-300', ring:'focus:border-emerald-400', dash:'border-emerald-200' },
+  amber:   { bar:'bg-amber-500', btn:'bg-amber-600 hover:bg-amber-700', soft:'bg-amber-100 text-amber-600', text:'text-amber-600', hover:'hover:border-amber-300', ring:'focus:border-amber-400', dash:'border-amber-200' },
+  rose:    { bar:'bg-rose-500', btn:'bg-rose-600 hover:bg-rose-700', soft:'bg-rose-100 text-rose-600', text:'text-rose-600', hover:'hover:border-rose-300', ring:'focus:border-rose-400', dash:'border-rose-200' },
+  sky:     { bar:'bg-sky-500', btn:'bg-sky-600 hover:bg-sky-700', soft:'bg-sky-100 text-sky-600', text:'text-sky-600', hover:'hover:border-sky-300', ring:'focus:border-sky-400', dash:'border-sky-200' },
+  fuchsia: { bar:'bg-fuchsia-500', btn:'bg-fuchsia-600 hover:bg-fuchsia-700', soft:'bg-fuchsia-100 text-fuchsia-600', text:'text-fuchsia-600', hover:'hover:border-fuchsia-300', ring:'focus:border-fuchsia-400', dash:'border-fuchsia-200' },
+  teal:    { bar:'bg-teal-500', btn:'bg-teal-600 hover:bg-teal-700', soft:'bg-teal-100 text-teal-600', text:'text-teal-600', hover:'hover:border-teal-300', ring:'focus:border-teal-400', dash:'border-teal-200' }
+};
+/* ---------- QUESTION BANK: generated into 1,000+ unique questions ---------- */
+const WORDS = [
+["happy","glad","sad","feeling or showing joy","She felt happy after the good news."],
+["sad","unhappy","cheerful","feeling sorrow","He looked sad when the film ended."],
+["big","huge","small","of large size","The big dog barked at the stranger."],
+["small","tiny","large","of little size","A small bird sat on the fence."],
+["fast","quick","slow","moving at high speed","The fast train arrived early."],
+["slow","sluggish","quick","moving with little speed","The slow bus took an hour."],
+["brave","courageous","cowardly","ready to face danger","The brave firefighter saved the child."],
+["clever","smart","foolish","quick at learning","The clever student solved the puzzle."],
+["begin","start","finish","to take the first step","Let us begin the lesson now."],
+["finish","complete","begin","to bring to an end","I will finish the report today."],
+["show","demonstrate","hide","to make something visible","Can you show me how it works?"],
+["hide","conceal","reveal","to put out of sight","She tried to hide the gift."],
+["buy","purchase","sell","to obtain by paying","I want to buy a new phone."],
+["sell","vend","buy","to give something for money","He will sell his old car."],
+["rich","wealthy","poor","having a lot of money","The rich man bought a yacht."],
+["poor","needy","wealthy","having little money","The poor family needed help."],
+["angry","furious","calm","feeling strong displeasure","He was angry about the delay."],
+["calm","peaceful","anxious","quiet and relaxed","She stayed calm during the storm."],
+["easy","simple","difficult","not hard to do","The test was easy for me."],
+["difficult","hard","easy","not simple","Learning Chinese can be difficult."],
+["help","assist","hinder","to make a task easier","Could you help me carry this?"],
+["hinder","obstruct","help","to make progress harder","Heavy rain may hinder the work."],
+["remember","recall","forget","to keep in mind","I cannot remember his name."],
+["forget","overlook","remember","to fail to recall","Do not forget your keys."],
+["tired","exhausted","energetic","very weary","After the run I felt exhausted."],
+["energetic","lively","lazy","full of energy","The energetic puppy ran in circles."],
+["important","crucial","trivial","of great significance","Sleep is crucial for good health."],
+["trivial","minor","important","of little importance","It was a trivial mistake."],
+["beautiful","lovely","ugly","pleasing to look at","The sunset was beautiful tonight."],
+["ugly","unattractive","pretty","unpleasant to look at","The old building looked ugly."],
+["strange","odd","normal","unusual","It is strange that she left early."],
+["normal","usual","unusual","typical","It is normal to feel nervous."],
+["polite","courteous","rude","showing good manners","The waiter was polite to us."],
+["rude","impolite","polite","showing bad manners","It was rude to interrupt him."],
+["honest","truthful","dishonest","telling the truth","An honest answer helps everyone."],
+["generous","kind","selfish","willing to give","She is generous with her time."],
+["lazy","idle","hardworking","not wanting to work","Do not be lazy about homework."],
+["hardworking","diligent","lazy","working very hard","Her diligent work earned a promotion."],
+["wise","sensible","foolish","having good judgement","A wise teacher listens carefully."],
+["near","close","far","not far in distance","The bank is near the station."],
+["far","distant","near","a long way away","The village is far from here."],
+["increase","grow","decrease","to become larger","Prices will increase next year."],
+["decrease","reduce","increase","to become smaller","We must decrease our spending."],
+["accept","receive","reject","to agree to take","I accept your kind invitation."],
+["reject","refuse","accept","to say no to","The company rejected my application."],
+["allow","permit","forbid","to let something happen","Parents do not allow late nights."],
+["forbid","prohibit","allow","to officially refuse","The sign forbids parking here."],
+["gather","collect","scatter","to bring together","We gather every Sunday for lunch."],
+["scatter","spread","gather","to throw in different directions","The wind scattered the leaves."],
+["ancient","old","modern","very old","The ancient ruins attract many tourists."],
+["modern","current","ancient","of the present time","The modern kitchen has a dishwasher."],
+["quiet","silent","noisy","making little noise","The library is quiet in the afternoon."],
+["noisy","loud","quiet","making a lot of sound","The noisy children played outside."],
+["clean","spotless","dirty","free from dirt","Keep your room clean and tidy."],
+["dirty","filthy","clean","covered in dirt","His shoes were dirty after the walk."],
+["journey","trip","stay","a long travel from one place to another","The journey took three days by train."],
+["courage","bravery","fear","the ability to face danger","She showed great courage."],
+["fear","terror","courage","a strong feeling of danger","Fear kept him awake at night."],
+["joy","delight","sorrow","great happiness","Her joy was obvious at the party."],
+["sorrow","grief","joy","deep sadness","He felt sorrow after the loss."],
+["strong","powerful","weak","having great physical force","The strong wind knocked down a tree."],
+["weak","feeble","strong","lacking strength","He felt weak after the illness."],
+["bright","shining","dim","giving much light","The bright sun warmed the beach."],
+["dim","faint","bright","giving little light","The room was dim in the evening."],
+["wet","damp","dry","covered in water","My clothes are still wet."],
+["dry","arid","wet","without water or moisture","The desert is very dry."],
+["pleased","delighted","upset","feeling satisfied","I am pleased with the result."],
+["upset","distressed","pleased","feeling unhappy","She was upset about the news."],
+["expensive","costly","cheap","high in price","That watch is very expensive."],
+["cheap","inexpensive","expensive","low in price","The cheap ticket saved money."],
+["friend","companion","enemy","a person you like","My best friend lives nearby."],
+["enemy","rival","friend","a person who opposes you","He made an enemy at work."],
+["advance","progress","retreat","to move forward","Science will advance quickly."],
+["retreat","withdraw","advance","to move back","The army began to retreat."],
+["active","busy","idle","full of action","She leads a very active life."],
+["idle","inactive","active","not working","The machine stood idle all day."],
+["careful","cautious","careless","paying attention","Be careful on the icy road."],
+["careless","reckless","careful","not paying attention","A careless mistake cost us money."],
+["agree","consent","disagree","to have the same opinion","We all agree on the plan."],
+["disagree","dispute","agree","to have a different opinion","I disagree with that idea."],
+["brief","short","lengthy","lasting a short time","The speech was brief and clear."],
+["lengthy","long","brief","lasting a long time","The meeting was lengthy."],
+["cruel","harsh","kind","causing pain","It was cruel to leave him out."],
+["gentle","mild","harsh","soft and kind","The nurse had a gentle voice."],
+["nervous","anxious","confident","feeling worried","I feel nervous before exams."],
+["confident","assured","nervous","feeling sure of yourself","She sounded confident in her talk."],
+["permanent","lasting","temporary","meant to last forever","The change is permanent."],
+["temporary","brief","permanent","lasting a short time","The job is temporary."],
+["rough","uneven","smooth","not level or soft","The road was rough near the farm."],
+["smooth","even","rough","free from bumps","The table has a smooth surface."],
+["complete","whole","partial","with nothing missing","The puzzle is complete."],
+["partial","incomplete","complete","not whole","The result was only partial."],
+["cheerful","joyful","gloomy","happy and bright","The cheerful waiter smiled at us."],
+["gloomy","dismal","cheerful","dark and sad","The weather was gloomy all week."],
+["accurate","precise","inaccurate","correct in every detail","The map is accurate."],
+["inaccurate","wrong","accurate","not correct","The report was inaccurate."],
+["expand","enlarge","shrink","to become bigger","The city will expand next year."],
+["shrink","contract","expand","to become smaller","Wool can shrink in hot water."],
+["modest","humble","arrogant","not boastful","He is modest about his success."],
+["arrogant","proud","modest","showing too much pride","The arrogant manager ignored us."],
+["ignore","neglect","notice","to pay no attention to","Do not ignore the warning signs."],
+["notice","observe","ignore","to become aware of","Did you notice the change?"],
+["wander","roam","settle","to walk without a clear path","We wandered through the market."],
+["settle","resolve","wander","to decide or end a problem","We need to settle this today."],
+["praise","compliment","criticise","to express approval","The teacher praised her effort."],
+["criticise","blame","praise","to find faults in","The critics criticised the film."],
+["victory","win","defeat","success in a contest","Their victory surprised everyone."],
+["defeat","loss","victory","failure to win","The team accepted defeat gracefully."],
+["freedom","liberty","captivity","the state of being free","Freedom is precious to everyone."],
+["captivity","imprisonment","freedom","being held prisoner","The bird lived in captivity."],
+["sharp","keen","dull","quick to notice things","She has a sharp mind."],
+["dull","boring","sharp","lacking interest","The lecture was dull."],
+["raise","lift","lower","to move upward","Please raise your hand."],
+["lower","reduce","raise","to move downward","Lower the volume a little."],
+["include","contain","exclude","to have as a part","The price includes breakfast."],
+["exclude","omit","include","to leave out","The list excludes children."],
+["reply","answer","ask","to respond","Please reply by Friday."],
+["question","ask","answer","to put a query to","Teachers often question their students."],
+["entrance","entry","exit","the way into a place","The entrance is on the left."],
+["exit","way out","entrance","the way out of a place","Use the exit at the back."]
+];
+const IDIOMS = [
+["Break the ice","start a friendly conversation"],["Piece of cake","something very easy"],["Under the weather","feeling slightly ill"],
+["Hit the books","study hard"],["Let the cat out of the bag","reveal a secret by accident"],["Once in a blue moon","very rarely"],
+["Bite the bullet","face something unpleasant with courage"],["Spill the beans","reveal a secret"],["Cost an arm and a leg","be very expensive"],
+["Call it a day","stop working for today"],["Hit the sack","go to bed"],["Beat around the bush","avoid the main point"],
+["Barking up the wrong tree","pursuing a mistaken idea"],["The ball is in your court","it is your decision now"],["Burn the midnight oil","work late into the night"],
+["Cut corners","do something cheaply or carelessly"],["Down to earth","practical and realistic"],["Get out of hand","become impossible to control"],
+["Go the extra mile","make an extra effort"],["Hit the nail on the head","be exactly right"],["In the same boat","in the same difficult situation"],
+["Jump the gun","act too early"],["Keep an eye on","watch carefully"],["Know the ropes","understand how things work"],
+["Make ends meet","earn enough to pay for basic needs"],["On the ball","alert and quick to understand"],["Once in a while","occasionally"],
+["Pull someone's leg","tease someone jokingly"],["Rain cats and dogs","rain very heavily"],["See eye to eye","agree completely"],
+["Take it easy","relax and not worry"],["The best of both worlds","a mix of two good things"],["Up in the air","still uncertain"],
+["Water under the bridge","a past problem that no longer matters"],["Wrap your head around","understand something difficult"],["Let sleeping dogs lie","avoid stirring up trouble"],
+["A dime a dozen","very common and cheap"],["Caught red-handed","caught in the act of doing wrong"],["Give it a shot","try something"]
+];
+const PHRASALS = [
+["give up","stop trying"],["look after","take care of"],["run out of","have no more"],["put off","postpone"],
+["turn down","refuse or reduce the volume of"],["take off","leave the ground or remove clothes"],["find out","discover"],["get along","have a friendly relationship"],
+["look forward to","wait eagerly for"],["carry on","continue"],["pick up","collect or learn casually"],["set up","establish or arrange"],
+["break down","stop working or lose control of emotions"],["call off","cancel"],["figure out","understand or solve"],["get over","recover from"],
+["look into","investigate"],["make up","invent or reconcile after an argument"],["show up","arrive"],["take after","resemble a parent"],
+["come across","find by chance"],["bring up","raise a child or mention a topic"],["cut down on","reduce"],["go over","review carefully"],
+["hold on","wait a moment"],["work out","exercise or find a solution"],["drop by","visit briefly"],["put up with","tolerate"],
+["run into","meet by chance"],["check out","look at or investigate"],["look up","search for information"],["give in","surrender"],
+["get rid of","remove"],["sign up","register"],["take over","take control"],["wear out","become worn or exhausted"]
+];
+const GRAMMAR_PAIRS = [
+["Yesterday I went to the market.","Yesterday I go to the market.","Use the past simple (went) for finished actions in the past."],
+["I have finished my homework.","I have finish my homework.","After have, use the past participle (finished)."],
+["There are many people here.","There is many people here.","Plural nouns take are."],
+["I have lived here for ten years.","I am living here for ten years.","Present perfect shows a situation that started in the past and continues now."],
+["She is taller than her brother.","She is more tall than her brother.","Short adjectives take -er: taller."],
+["If it rains, we will stay home.","If it will rain, we stay home.","First conditional: if + present simple, will + base verb."],
+["I am interested in music.","I am interesting in music.","Interested describes a feeling; interesting describes things."],
+["He asked me where I lived.","He asked me where did I live.","Reported questions use normal word order."],
+["I enjoy reading books.","I enjoy to read books.","Enjoy is followed by the -ing form."],
+["Could you help me, please?","Could you helping me, please?","Modal verbs are followed by the base verb."],
+["We were waiting for the bus when it started to rain.","We were wait for the bus when it started to rain.","Past continuous uses was/were + -ing."],
+["Each of the students has a book.","Each of the students have a book.","Each takes a singular verb."]
+];
+const VERBS = [
+["go","goes","to school every day"],["have","has","breakfast at seven"],["watch","watches","TV in the evening"],
+["study","studies","English at night"],["teach","teaches","children at a school"],["fix","fixes","old computers"],
+["try","tries","very hard every day"],["wash","washes","the dishes after dinner"],["finish","finishes","work before six"],
+["play","plays","football on Sundays"],["carry","carries","heavy bags up the stairs"],["cry","cries","at sad films"],
+["live","lives","near the station"],["speak","speaks","three languages"],["do","does","yoga every morning"],["write","writes","a letter every week"]
+];
+const CATS = [
+{ name: "fruits", items: ["apple","banana","cherry","mango","grape","orange","peach","melon"] },
+{ name: "vegetables", items: ["carrot","potato","onion","spinach","pepper","cabbage","lettuce","cucumber"] },
+{ name: "animals", items: ["lion","tiger","horse","zebra","camel","giraffe","monkey","elephant"] },
+{ name: "jobs", items: ["doctor","teacher","engineer","pilot","nurse","lawyer","farmer","chef"] },
+{ name: "feelings", items: ["happy","angry","afraid","surprised","bored","excited","worried","proud"] },
+{ name: "weather words", items: ["rain","snow","wind","fog","storm","sunshine","thunder","hail"] },
+{ name: "vehicles", items: ["bus","train","bicycle","scooter","truck","tram","taxi","plane"] },
+{ name: "colours", items: ["red","blue","green","yellow","purple","pink","black","brown"] },
+{ name: "rooms", items: ["kitchen","bedroom","bathroom","lounge","garage","hallway","attic","balcony"] },
+{ name: "sports", items: ["football","tennis","cricket","hockey","golf","rugby","boxing","swimming"] },
+{ name: "body parts", items: ["arm","leg","knee","shoulder","elbow","ankle","wrist","finger"] }
+];
+
+const shuffleQ = arr => shuffle(arr);
+const others = (arr, exclude, n) => shuffle(arr.filter(x => !exclude.includes(x))).slice(0, n);
+const ALL_WORDS = WORDS.map(x => x[0]);
+function mcq(q, correct, wrong, e) {
+  const o = shuffle([correct, ...wrong]);
+  return { t: 'choice', q, o, a: o.indexOf(correct), e };
+}
+function misspell(word) {
+  const cands = new Set();
+  for (let i = 0; i < word.length - 1; i++) {
+    const c = word.split(''); [c[i], c[i + 1]] = [c[i + 1], c[i]]; cands.add(c.join(''));
+  }
+  for (let i = 1; i < word.length - 1; i++) cands.add(word.slice(0, i) + word.slice(i + 1));
+  cands.delete(word);
+  return shuffle([...cands]);
+}
+function scrambleLetters(w) {
+  let s = w.toUpperCase().split('').join(' ');
+  for (let k = 0; k < 6; k++) {
+    s = shuffle(w.toUpperCase().split('')).join(' ');
+    if (s.replace(/ /g, '') !== w.toUpperCase()) break;
+  }
+  return s;
+}
+function oddPool(n) {
+  const out = [], seen = new Set();
+  let guard = 0;
+  while (out.length < n && guard++ < 8000) {
+    const ci = Math.floor(Math.random() * CATS.length);
+    const cj = (ci + 1 + Math.floor(Math.random() * (CATS.length - 1))) % CATS.length;
+    const three = shuffle(CATS[ci].items).slice(0, 3);
+    const outsider = CATS[cj].items[Math.floor(Math.random() * CATS[cj].items.length)];
+    const key = [...three].sort().join('|') + '|' + outsider;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const o = shuffle([...three, outsider]);
+    out.push({ t: 'choice', q: 'Which word does NOT belong with the others?', o, a: o.indexOf(outsider),
+      e: `${three.join(', ')} are all ${CATS[ci].name}. ${outsider} is a word from another group (${CATS[cj].name}).` });
+  }
+  return out;
+}
+
+/* ---------- GAMES (12) ---------- */
+const GAMES = [
+  { id:'wordbuilder', title:'Word Builder', icon:'🧩', accent:'violet', level:'Advanced', instr:'Unscramble the letters',
+    desc:'Unscramble letters to build advanced vocabulary.',
+    make: () => WORDS.filter(x => x[0].length >= 5).map(([w,,,d]) => ({ t:'type', q: scrambleLetters(w), h: d, a: w.toUpperCase(), e: `"${w}" means ${d}.` })) },
+  { id:'grammar', title:'Grammar Fix', icon:'✏️', accent:'indigo', level:'Intermediate', instr:'Choose the correct sentence',
+    desc:'Spot the grammatically correct sentence.',
+    make: () => [
+      ...GRAMMAR_PAIRS.map(([c, w, e]) => mcq('Which sentence is correct?', c, [w], e)),
+      ...VERBS.flatMap(([base, sg, rest]) => [
+        ...['She','He','My sister','Ali','My father'].map(s => mcq(`${s} ___ ${rest}.`, sg, [base], 'With he, she, it or a single person, the verb takes -s or -es.')),
+        ...['They','We','My friends'].map(s => mcq(`${s} ___ ${rest}.`, base, [sg], 'With I, you, we or they, use the base verb.'))
+      ])
+    ] },
+  { id:'synonym', title:'Synonym Match', icon:'🔗', accent:'emerald', level:'Beginner', instr:'Pick the closest meaning',
+    desc:'Find the word with the same meaning.',
+    make: () => WORDS.map(([w,s,a]) => mcq(`Which word means the same as "${w}"?`, s, [a, ...others(ALL_WORDS, [w,s,a], 2)], `"${s}" is a synonym of "${w}".`)) },
+  { id:'antonym', title:'Antonym Match', icon:'🔄', accent:'rose', level:'Beginner', instr:'Pick the opposite',
+    desc:'Pick the word with the opposite meaning.',
+    make: () => WORDS.map(([w,s,a]) => mcq(`Opposite of "${w}"?`, a, [s, ...others(ALL_WORDS, [w,s,a], 2)], `"${a}" is the opposite of "${w}".`)) },
+  { id:'fillblank', title:'Fill the Gap', icon:'🧱', accent:'sky', level:'Intermediate', instr:'Choose the word that completes the sentence',
+    desc:'Complete sentences with the right word.',
+    make: () => WORDS.filter(([w,,,,ex]) => new RegExp('\\b' + w + '\\b', 'i').test(ex))
+      .map(([w,s,,d,ex]) => mcq(ex.replace(new RegExp('\\b' + w + '\\b', 'i'), '____'), w, others(ALL_WORDS, [w,s], 2), `"${w}" fits best: ${d}.`)) },
+  { id:'spelling', title:'Spelling Check', icon:'🔤', accent:'amber', level:'Beginner', instr:'Which spelling is correct?',
+    desc:'Spot the correctly spelled word.',
+    make: () => WORDS.map(([w]) => { const m = misspell(w); return m.length >= 2 ? mcq('Choose the correct spelling.', w, m.slice(0, 2), `The correct spelling is "${w}".`) : null; }).filter(Boolean) },
+  { id:'idioms', title:'Idiom Master', icon:'💬', accent:'fuchsia', level:'Advanced', instr:'What does this idiom mean?',
+    desc:'Learn what everyday idioms really mean.',
+    make: () => IDIOMS.map(([i,m]) => mcq(`What does "${i}" mean?`, m, others(IDIOMS.map(x => x[1]), [m], 2), `"${i}" means ${m}.`)) },
+  { id:'sentence', title:'Sentence Builder', icon:'🧠', accent:'teal', level:'Intermediate', instr:'Tap the words in the correct order',
+    desc:'Put scrambled words into the right order.',
+    make: () => WORDS.map(([w,,,d,ex]) => ({ t:'order', w: ex.split(' '), h: `Hint: ${d}`, a: ex, e: `Use "${w}" naturally in a sentence.` })) },
+  { id:'listen', title:'Listen & Spell', icon:'🎧', accent:'sky', level:'Intermediate', instr:'Press play, listen, then type the word',
+    desc:'Listen to a word and type exactly what you hear.',
+    make: () => WORDS.map(([w,,,d]) => ({ t:'listen', a: w, h: d, e: `"${w}" means ${d}.` })) },
+  { id:'oddone', title:'Odd One Out', icon:'🔍', accent:'amber', level:'Beginner', instr:'Find the word that does not belong',
+    desc:'Spot the word that does not fit the group.',
+    make: () => oddPool(300) },
+  { id:'phrasal', title:'Phrasal Verbs', icon:'🗣️', accent:'rose', level:'Advanced', instr:'Choose the correct meaning',
+    desc:'Learn phrasal verbs used in everyday English.',
+    make: () => PHRASALS.map(([p,m]) => mcq(`What does "${p}" mean?`, m, others(PHRASALS.map(x => x[1]), [m], 2), `"${p}" means ${m}.`)) },
+  { id:'speed', title:'Speed Round', icon:'⚡', accent:'fuchsia', level:'Challenge', instr:'Answer fast: 12 seconds per question', timed: 12,
+    desc:'Mixed questions from every game. Beat the clock.',
+    make: () => shuffle(['synonym','antonym','spelling','idioms','phrasal','oddone','fillblank','grammar']
+      .flatMap(id => GAMES.find(g => g.id === id).make().filter(q => q.t === 'choice'))) }
+];
+GAMES.forEach(g => { g.count = g.make().length; });
+function qbankTotal() { return GAMES.filter(g => g.id !== 'speed').reduce((a, g) => a + g.count, 0); }
+function updateQbank() { const el = $('qbank-count'); if (el) el.textContent = qbankTotal().toLocaleString() + ' questions'; }
+function clearQTimer() { if (G && G.tt) { clearInterval(G.tt); G.tt = null; } const el = $('game-timer'); if (el) el.classList.add('hidden'); }
+function correctText(q) { return q.t === 'choice' ? q.o[q.a] : q.a; }
+function startQTimer() {
+  let left = G.game.timed;
+  const el = $('game-timer');
+  el.classList.remove('hidden'); el.textContent = '⏱ ' + left + 's';
+  G.tt = setInterval(() => {
+    left--; el.textContent = '⏱ ' + left + 's';
+    if (left <= 0) {
+      clearQTimer();
+      if (!G.answered) {
+        G.answered = true;
+        const q = G.game.qs[G.i];
+        document.querySelectorAll('#game-area .opt').forEach((b, j) => { b.disabled = true; if (q.t === 'choice' && j === q.a) b.classList.add('correct'); });
+        gameFeedback(false, correctText(q), 'Time is up! ' + (q.e || ''));
+      }
+    }
+  }, 1000);
+}
+function gameSpeak() { const q = G.game.qs[G.i]; if (q && q.a) speakText(q.a, true, null); }
+let G = null;
+function renderGameMenu() {
+  updateQbank();
+  $('game-xp').textContent = S.xp.toLocaleString();
+  $('stat-completed').textContent = `${S.completed.length} / ${GAMES.length}`;
+  const b = Object.values(S.bests);
+  $('stat-best').textContent = b.length ? Math.round(b.reduce((a, c) => a + c, 0) / b.length) + '%' : '—';
+  $('stat-played').textContent = S.gamesToday;
+  $('game-menu').innerHTML = GAMES.map(g => {
+    const a = ACC[g.accent], best = S.bests[g.id];
+    return `
+    <button onclick="startGame('${g.id}')" class="group text-left bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col hover:shadow-md hover:-translate-y-0.5 transition-all ${a.hover}">
+      <div class="flex items-start justify-between">
+        <div class="w-11 h-11 rounded-xl ${a.soft} flex items-center justify-center text-xl">${g.icon}</div>
+        ${best !== undefined ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${a.soft}">Best ${best}%</span>` : '<span class="text-[10px] font-bold text-slate-400 uppercase">New</span>'}
+      </div>
+      <h3 class="font-bold text-sm mt-3">${g.title}</h3>
+      <p class="text-[11px] text-slate-500 mt-1 flex-1">${g.desc}</p>
+      <div class="flex items-center justify-between mt-4 text-[11px] font-semibold text-slate-500">
+        <span>${g.count.toLocaleString()} questions · ${g.level}</span><span class="${a.text} group-hover:translate-x-1 transition-transform">Play →</span>
+      </div>
+    </button>`;
+  }).join('');
+  icons();
+}
+function startGame(id) {
+  const base = GAMES.find(g => g.id === id);
+  const game = Object.assign({}, base, { qs: shuffle(base.make()).slice(0, 10) });
+  G = { game, i: 0, correct: 0, answered: false, picked: [], shuffled: null, tt: null };
+  $('game-menu').classList.add('hidden');
+  $('game-box').classList.remove('hidden');
+  $('game-title').textContent = game.title;
+  $('game-instr').textContent = game.instr;
+  renderGameQ();
+  $('game-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function closeGame() {
+  clearQTimer();
+  G = null;
+  $('game-box').classList.add('hidden');
+  $('game-menu').classList.remove('hidden');
+  renderGameMenu();
+}
+function setBar(pct, accent) { const bar = $('game-bar'); bar.style.width = pct + '%'; bar.className = 'h-full rounded-full transition-all duration-500 ' + ACC[accent].bar; }
+function renderGameQ() {
+  clearQTimer();
+  const total = G.game.qs.length, q = G.game.qs[G.i], a = ACC[G.game.accent];
+  $('game-label').textContent = `${G.i + 1} of ${total}`;
+  setBar((G.i / total) * 100, G.game.accent);
+  $('game-feedback').innerHTML = '';
+  const area = $('game-area');
+  if (q.t === 'choice') {
+    area.innerHTML = `<div class="pop space-y-4"><h3 class="text-base sm:text-lg font-bold text-center">${q.q || 'Which sentence is correct?'}</h3>
+      <div class="grid gap-2.5">${q.o.map((o, i) => `<button class="opt" onclick="gameAnswer(${i})">${esc(o)}</button>`).join('')}</div></div>`;
+  } else if (q.t === 'listen') {
+    area.innerHTML = `<div class="pop text-center space-y-4">
+      <button onclick="gameSpeak()" class="mx-auto w-20 h-20 rounded-full ${a.btn} text-white flex items-center justify-center text-3xl shadow-lg">🔊</button>
+      <p class="text-xs text-slate-500">Tap to hear the word again · Hint: ${q.h}</p>
+      <form onsubmit="event.preventDefault(); gameType();" class="flex gap-2 max-w-md mx-auto pt-2">
+        <input id="g-input" autocomplete="off" placeholder="Type what you hear…" class="flex-1 bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none ${a.ring}">
+        <button class="px-6 py-3 rounded-xl text-white font-bold text-sm ${a.btn}">Check</button>
+      </form></div>`;
+    setTimeout(() => { gameSpeak(); const el = $('g-input'); if (el) el.focus(); }, 350);
+  } else if (q.t === 'type') {
+    area.innerHTML = `<div class="pop text-center space-y-3">
+      <h3 class="text-2xl sm:text-3xl font-black tracking-widest ${a.text}">${q.q}</h3>
+      <p class="text-xs text-slate-500">Hint: ${q.h}</p>
+      <form onsubmit="event.preventDefault(); gameType();" class="flex gap-2 max-w-md mx-auto pt-2">
+        <input id="g-input" autocomplete="off" placeholder="Type your answer…" class="flex-1 bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none ${a.ring}">
+        <button class="px-6 py-3 rounded-xl text-white font-bold text-sm ${a.btn}">Check</button>
+      </form></div>`;
+    setTimeout(() => { const el = $('g-input'); if (el) el.focus(); }, 60);
+  } else {
+    if (!G.shuffled) G.shuffled = shuffle(q.w);
+    renderOrder();
+  }
+  if (G.game.timed) startQTimer();
+  icons();
+}
+function gameAnswer(i) {
+  if (G.answered) return;
+  const q = G.game.qs[G.i];
+  G.answered = true;
+  const ok = i === q.a;
+  if (ok) G.correct++;
+  document.querySelectorAll('#game-area .opt').forEach((b, j) => { b.disabled = true; if (j === q.a) b.classList.add('correct'); else if (j === i) b.classList.add('wrong'); });
+  gameFeedback(ok, q.o[q.a], q.e);
+}
+function gameType() {
+  if (G.answered) return;
+  const input = $('g-input');
+  if (!input || !input.value.trim()) return;
+  const q = G.game.qs[G.i];
+  G.answered = true; input.disabled = true;
+  const ok = norm(input.value) === norm(q.a);
+  if (ok) G.correct++;
+  input.classList.add(ok ? 'border-emerald-500' : 'border-rose-500');
+  gameFeedback(ok, q.a, q.e);
+}
+function renderOrder() {
+  const q = G.game.qs[G.i], a = ACC[G.game.accent], done = G.answered;
+  const picked = G.picked.map((k, pos) => `<button class="chip ${a.text}" ${done ? 'disabled' : `onclick="gameUnpick(${pos})"`}>${esc(G.shuffled[k])}</button>`).join('');
+  const pool = G.shuffled.map((w, k) => G.picked.includes(k) ? '' : `<button class="chip" ${done ? 'disabled' : `onclick="gamePick(${k})"`}>${esc(w)}</button>`).join('');
+  $('game-area').innerHTML = `<div class="pop space-y-5">
+    <p class="text-center text-xs text-slate-500">Hint: ${q.h}</p>
+    <div class="min-h-[64px] p-3 rounded-2xl border-2 border-dashed ${a.dash} flex flex-wrap gap-2 justify-center items-center">
+      ${picked || '<span class="text-xs text-slate-400">Tap the words below to build the sentence</span>'}
+    </div>
+    <div class="flex flex-wrap gap-2 justify-center">${pool}</div>
+    <div class="flex justify-center gap-2">
+      <button onclick="gameReset()" ${done ? 'disabled' : ''} class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-40">Reset</button>
+      <button onclick="gameCheckOrder()" ${done || G.picked.length < q.w.length ? 'disabled' : ''} class="px-6 py-2 rounded-xl text-white text-xs font-bold ${a.btn} disabled:opacity-40 disabled:cursor-not-allowed">Check</button>
+    </div></div>`;
+}
+function gamePick(k) { if (G.answered) return; G.picked.push(k); renderOrder(); }
+function gameUnpick(pos) { if (G.answered) return; G.picked.splice(pos, 1); renderOrder(); }
+function gameReset() { if (G.answered) return; G.picked = []; renderOrder(); }
+function gameCheckOrder() {
+  if (G.answered) return;
+  const q = G.game.qs[G.i];
+  const sentence = G.picked.map(k => G.shuffled[k]).join(' ');
+  G.answered = true;
+  const ok = norm(sentence) === norm(q.a);
+  if (ok) G.correct++;
+  renderOrder();
+  gameFeedback(ok, q.a, q.e);
+}
+function gameFeedback(ok, answer, explain) {
+  clearQTimer();
+  const last = G.i === G.game.qs.length - 1, a = ACC[G.game.accent];
+  $('game-feedback').innerHTML = `
+    <div class="pop mt-4 rounded-2xl p-4 ${ok ? 'bg-emerald-50 border border-emerald-200' : 'bg-rose-50 border border-rose-200'}">
+      <p class="font-extrabold text-sm ${ok ? 'text-emerald-700' : 'text-rose-700'}">${ok ? '✅ Correct! +10 XP' : '❌ Not quite'}</p>
+      ${ok ? '' : `<p class="text-xs text-slate-700 mt-1">Answer: <b>${esc(answer)}</b></p>`}
+      <p class="text-xs text-slate-600 mt-1">${esc(explain)}</p>
+    </div>
+    <button onclick="gameNext()" class="mt-4 w-full py-3 rounded-xl text-white font-bold text-sm ${a.btn}">${last ? 'See Results' : 'Next Question'}</button>`;
+  $('game-feedback').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function gameNext() { G.i++; G.answered = false; G.picked = []; G.shuffled = null; if (G.i >= G.game.qs.length) gameResults(); else renderGameQ(); }
+function gameResults() {
+  const total = G.game.qs.length, pct = Math.round(G.correct / total * 100), xp = G.correct * 10, a = ACC[G.game.accent];
+  S.xp += xp; S.homeXP += xp; S.gamesToday++;
+  if (!S.completed.includes(G.game.id)) S.completed.push(G.game.id);
+  S.bests[G.game.id] = Math.max(S.bests[G.game.id] || 0, pct);
+  saveState();
+  setBar(100, G.game.accent);
+  $('game-label').textContent = 'Done';
+  $('game-feedback').innerHTML = '';
+  const emoji = pct >= 80 ? '🏆' : pct >= 50 ? '👍' : '💪';
+  const msg = pct >= 80 ? 'Excellent work!' : pct >= 50 ? 'Good effort, keep going!' : 'Practice makes perfect. Try again!';
+  $('game-area').innerHTML = `<div class="pop text-center space-y-4 py-4">
+    <div class="text-5xl">${emoji}</div>
+    <h3 class="text-xl font-extrabold">${msg}</h3>
+    <p class="text-sm text-slate-600">You got <b>${G.correct} of ${total}</b> correct (${pct}%)</p>
+    <span class="inline-block px-4 py-1.5 rounded-full text-sm font-extrabold ${a.soft}">+${xp} XP earned</span>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+      <button onclick="startGame('${G.game.id}')" class="px-6 py-3 rounded-xl text-white font-bold text-sm ${a.btn}">Play Again</button>
+      <button onclick="closeGame()" class="px-6 py-3 rounded-xl border-2 border-slate-200 font-bold text-sm hover:bg-slate-50">All Games</button>
+    </div></div>`;
+  icons();
+}
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+
+/* =====================================================================
+   ACCOUNTS: sign in, create account, Google, guest, sign out
+   NOTE: accounts live in this browser (demo-grade). For real accounts
+   shared across devices, add a server with hashed passwords and
+   verified Google ID tokens.
+   ===================================================================== */
+const SESSION_KEY = 'realcall.session';
+const ACCOUNTS_KEY = 'realcall.accounts';
+/* Google Identity Services (client-side only). Create a Web client OAuth 2.0 ID in
+   Google Cloud Console → APIs & Services → Credentials. Add your site origin
+   (e.g. http://localhost:3000 and your production domain) under Authorized JavaScript origins.
+   Paste the client ID below. Never put a client secret or service-account key in this file. */
+const GOOGLE_CLIENT_ID = ''; // e.g. '123456789-abcdef.apps.googleusercontent.com'
+let CURRENT = null;
+let authTabMode = 'in';
+
+function readJSON(key, fallback) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; } }
+function writeJSON(key, v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} }
+async function hashPassword(email, pass) {
+  const data = 'realcall|' + email.toLowerCase() + '|' + pass;
+  if (window.crypto && crypto.subtle) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(data));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  let h = 5381; for (const ch of data) h = ((h << 5) + h + ch.charCodeAt(0)) >>> 0;
+  return 'x' + h.toString(16);
+}
+function authTab(mode) {
+  authTabMode = mode;
+  const up = mode === 'up';
+  $('tab-in').classList.toggle('on', !up);
+  $('tab-up').classList.toggle('on', up);
+  $('f-name-wrap').classList.toggle('hidden', !up);
+  $('auth-title').textContent = up ? 'Create your account' : 'Welcome back';
+  $('auth-sub').textContent = up ? 'Save your progress and sign in on any device.' : 'Sign in to continue your progress.';
+  $('auth-submit').textContent = up ? 'Create account' : 'Sign in';
+  $('f-pass').autocomplete = up ? 'new-password' : 'current-password';
+  hideErr();
+}
+function showErr(msg) { const e = $('auth-err'); e.textContent = msg; e.classList.remove('hidden'); }
+function hideErr() { $('auth-err').classList.add('hidden'); }
+function togglePass() {
+  const i = $('f-pass'), b = $('pass-eye');
+  const show = i.type === 'password';
+  i.type = show ? 'text' : 'password';
+  b.textContent = show ? 'Hide' : 'Show';
+}
+async function submitAuth(e) {
+  e.preventDefault();
+  hideErr();
+  const email = $('f-email').value.trim().toLowerCase();
+  const pass = $('f-pass').value;
+  const name = $('f-name').value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('Please enter a valid email address.');
+  if (pass.length < 6) return showErr('Password must be at least 6 characters.');
+  const accounts = readJSON(ACCOUNTS_KEY, {});
+  const hash = await hashPassword(email, pass);
+  if (authTabMode === 'up') {
+    if (!name) return showErr('Please enter your name.');
+    if (accounts[email]) return showErr('An account with this email already exists. Sign in instead.');
+    accounts[email] = { name, hash, created: Date.now() };
+    writeJSON(ACCOUNTS_KEY, accounts);
+    // Carry guest progress into the new account when upgrading
+    if (localStorage.getItem('realcall.guestUpgrade') === '1') {
+      const g = localStorage.getItem('realcall.v4:guest');
+      if (g) localStorage.setItem('realcall.v4:' + email, g);
+      localStorage.removeItem('realcall.guestUpgrade');
+    }
+    loginAs({ type: 'account', email, name });
+  } else {
+    const acc = accounts[email];
+    if (!acc || acc.hash !== hash) return showErr('Email or password is incorrect.');
+    loginAs({ type: 'account', email, name: acc.name });
+  }
+}
+function guestLogin() { loginAs({ type: 'guest', email: '', name: 'Guest' }); }
+function loginAs(sess) {
+  writeJSON(SESSION_KEY, sess);
+  setUser(sess);
+  toast(sess.type === 'guest' ? 'Welcome, Guest!' : `Welcome, ${sess.name}!`);
+}
+function setUser(sess) {
+  CURRENT = sess;
+  const key = sess.type === 'guest' ? 'guest' : sess.email;
+  STORE_KEY = 'realcall.v4:' + key;
+  const existed = localStorage.getItem(STORE_KEY) !== null;
+  S = loadState();
+  S.profile = Object.assign({}, DEFAULT_PROFILE, S.profile || {});
+  if (!existed) {
+    S.profile.name = sess.name || 'Guest';
+    S.xp = 0; S.homeXP = 0;
+    saveState();
+  }
+  document.body.classList.add('authed');
+  applyProfile();
+  renderSettings();
+  renderHome();
+  renderGameMenu();
+  renderAiSupport();
+  go('home');
+}
+function renderAccount() {
+  if (!CURRENT) return;
+  const isGuest = CURRENT.type === 'guest';
+  $('acc-desc').textContent = isGuest
+    ? 'You are using Guest mode. Progress is saved only in this browser. Create an account to keep it and sign in on other devices.'
+    : `Signed in as ${CURRENT.email}${CURRENT.type === 'google' ? ' with Google' : ''}.`;
+  $('acc-upgrade').classList.toggle('hidden', !isGuest);
+}
+function upgradeGuest() {
+  localStorage.setItem('realcall.guestUpgrade', '1');
+  localStorage.setItem('realcall.intent', 'signup');
+  signOut();
+}
+function signOut() {
+  try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+  location.reload();
+}
+
+/* Google sign-in (Google Identity Services). Works once GOOGLE_CLIENT_ID is set and the
+   site runs on an authorised origin. The token is decoded here for the demo; a production
+   app must verify the ID token on its server before trusting it. */
+function initGoogle() {
+  if (!GOOGLE_CLIENT_ID) return;
+  const s = document.createElement('script');
+  s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
+  s.onload = () => {
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogle });
+    google.accounts.id.renderButton($('google-btn'), { theme: 'outline', size: 'large', width: 320, text: 'continue_with' });
+  };
+  document.head.appendChild(s);
+}
+function googleSignIn() {
+  if (!GOOGLE_CLIENT_ID) { toast('Google sign-in needs a client ID. Add GOOGLE_CLIENT_ID in the code.'); return; }
+  if (window.google) google.accounts.id.prompt();
+}
+function handleGoogle(resp) {
+  try {
+    const part = resp.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(decodeURIComponent(escape(atob(part))));
+    loginAs({ type: 'google', email: payload.email, name: payload.name || payload.email.split('@')[0] });
+  } catch (e) { toast('Google sign-in failed. Please try again.'); }
+}
+
+/* ---------- Offline / slow network ---------- */
+function showNetBanner(show, text) {
+  const b = $('net-banner');
+  if (!b) return;
+  if (text) {
+    const t = $('net-banner-text');
+    if (t) t.textContent = text;
+  }
+  b.classList.toggle('hidden', !show);
+  document.body.style.paddingTop = show ? '40px' : '';
+}
+function retryConnection() {
+  if (navigator.onLine) {
+    showNetBanner(false);
+    toast('Back online');
+    // Soft health check
+    fetch('/api/health', { cache: 'no-store' }).catch(() => {
+      showNetBanner(true, 'Server unreachable. Check that the app is running.');
+    });
+  } else {
+    showNetBanner(true, 'Still offline. Google Login and live voice calls need internet.');
+    toast('Still offline');
+  }
+}
+window.addEventListener('online', () => {
+  showNetBanner(false);
+  toast('Internet restored');
+});
+window.addEventListener('offline', () => {
+  showNetBanner(true, 'You are offline. Google Login and live voice calls need internet.');
+  if (peerSearching) {
+    setSearchStatus('Offline — waiting for connection…');
+  }
+  if (peer && !peer.ended) {
+    setLiveMicState('Network offline');
+  }
+});
+// Initial check
+if (!navigator.onLine) {
+  setTimeout(() => showNetBanner(true, 'You are offline. Google Login and live voice calls need internet.'), 100);
+}
+
+function bootAuth() {
+  if (localStorage.getItem('realcall.intent') === 'signup') { authTab('up'); localStorage.removeItem('realcall.intent'); }
+  else authTab('in');
+  applyTheme();
+  initGoogle();
+  const sess = readJSON(SESSION_KEY, null);
+  if (sess && sess.type) setUser(sess);
+  icons();
+}
+
+renderTopicChips();
+renderCharGrid(true);
+renderGameMenu();
+renderHome();
+renderAiSupport();
+applyProfile();
+if (canSpeakOut) speechSynthesis.onvoiceschanged = () => {};
+bootAuth();
+icons();
+
+/* =====================================================================
+   SETTINGS: profile, learning mode, appearance, voice, data
+   ===================================================================== */
+function initials(name) {
+  return (name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('') || 'L').toUpperCase();
+}
+function applyProfile() {
+  const p = S.profile;
+  document.querySelectorAll('.me-init').forEach(el => el.textContent = initials(p.name));
+  document.querySelectorAll('.me-name').forEach(el => el.textContent = p.name);
+  document.querySelectorAll('.me-first').forEach(el => el.textContent = p.name.split(' ')[0]);
+  const plan = document.getElementById('me-plan');
+  if (plan) plan.textContent = CURRENT && CURRENT.type === 'guest' ? 'Guest' : 'Member';
+  applyTheme();
+}
+function applyTheme() {
+  const t = S.profile.theme;
+  const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.classList.toggle('dark', t === 'dark' || (t === 'system' && systemDark));
+}
+if (window.matchMedia) {
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  if (mq.addEventListener) mq.addEventListener('change', () => { if (S.profile.theme === 'system') applyTheme(); });
+}
+function markSeg(group, value) {
+  document.querySelectorAll(`[data-seg="${group}"]`).forEach(b => {
+    const on = b.dataset.val === value;
+    b.classList.toggle('border-indigo-500', on);
+    b.classList.toggle('bg-indigo-50', on);
+    b.classList.toggle('text-indigo-700', on);
+    b.classList.toggle('border-slate-200', !on);
+    b.classList.toggle('text-slate-600', !on);
+  });
+}
+function renderSettings() {
+  const p = S.profile;
+  $('set-name').value = p.name;
+  $('set-level').value = p.level;
+  $('set-accent').value = p.accent;
+  $('set-rate').value = p.rate;
+  $('set-rate-val').textContent = p.rate.toFixed(2) + 'x';
+  $('set-autolisten').checked = !!p.autoListen;
+  markSeg('mode', p.mode);
+  markSeg('theme', p.theme);
+  applyProfile();
+}
+function saveProfile() {
+  const name = ($('set-name').value.trim().slice(0, 24)) || 'Learner';
+  S.profile.name = name;
+  S.profile.level = $('set-level').value;
+  saveState();
+  applyProfile();
+  renderSettings();
+  toast('Profile saved');
+}
+function setMode(m) { S.profile.mode = m; saveState(); markSeg('mode', m); toast(m === 'focus' ? 'Focus mode: tips appear in your summary' : 'Relaxed mode: tips appear live'); }
+function setTheme(t) { S.profile.theme = t; saveState(); markSeg('theme', t); applyTheme(); }
+function setAccent(v) { S.profile.accent = v; saveState(); toast('Accent updated'); }
+function setRate(v) { S.profile.rate = parseFloat(v); $('set-rate-val').textContent = S.profile.rate.toFixed(2) + 'x'; saveState(); }
+function setAutoListen(on) { S.profile.autoListen = !!on; saveState(); toast(on ? 'Auto-listen on' : 'Auto-listen off: tap the mic to talk'); }
+function exportData() {
+  const payload = { exportedAt: new Date().toISOString(), profile: S.profile, xp: S.xp, homeXP: S.homeXP, bests: S.bests, completed: S.completed, history: S.history };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'real-call-data.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function resetProgress() {
+  if (!confirm('Reset your XP, best scores and completed games? Your profile and history stay.')) return;
+  S.xp = DEFAULT_STATE.xp; S.homeXP = DEFAULT_STATE.homeXP; S.bests = {}; S.completed = []; S.gamesToday = 0;
+  saveState(); renderHome(); renderGameMenu(); toast('Progress reset');
+}
+function deleteAllData() {
+  if (!confirm('Delete ALL your data in this browser (profile, progress and history)? This cannot be undone.')) return;
+  try {
+    localStorage.removeItem(STORE_KEY);
+    if (CURRENT && CURRENT.type === 'account') {
+      const accs = readJSON(ACCOUNTS_KEY, {}); delete accs[CURRENT.email]; writeJSON(ACCOUNTS_KEY, accs);
+    }
+    localStorage.removeItem(SESSION_KEY);
+  } catch (e) {}
+  location.reload();
+}
+</script>
+</body>
+</html>

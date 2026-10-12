@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Public educational and policy content should be crawlable.
+# Do not disallow the main app shell; SPA content is served from index.html.
+
+Sitemap: /sitemap.xml
